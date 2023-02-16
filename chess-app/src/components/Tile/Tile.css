@@ -1,10 +1,8 @@
-#chessboard {
+.tile {
     display: grid;
-    grid-template-columns: repeat(8, 100px);
-    grid-template-rows: repeat(8, 100px);
-    width: 800px;
-    height: 800px;
-    background-color: blue;
+    place-content: center;
+    width: 100px;
+    height: 100px;
 }
 
 #chessboard .tile {
@@ -18,4 +16,8 @@
 
 #chessboard .white-tile {
     background-color: #ebecd0;
+}
+
+.tile img  {
+    width: 80px;
 }
