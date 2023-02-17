@@ -12,6 +12,20 @@ interface Piece {
 
 const pieces: Piece[] = [];
 
+for (let p = 0; p < 2; p++) {
+    const type = p === 0 ? "b" : "w";
+    const verticalPosition = (p === 0) ? 7 : 0;
+
+pieces.push({image: `assets/images/rook_${type}.png`, horizontalPosition: 0, verticalPosition: verticalPosition});
+pieces.push({image: `assets/images/rook_${type}.png`, horizontalPosition: 7, verticalPosition: verticalPosition});
+pieces.push({image: `assets/images/knight_${type}.png`, horizontalPosition: 1, verticalPosition: verticalPosition});
+pieces.push({image: `assets/images/knight_${type}.png`, horizontalPosition: 6, verticalPosition: verticalPosition});
+pieces.push({image: `assets/images/bishop_${type}.png`, horizontalPosition: 2, verticalPosition: verticalPosition});
+pieces.push({image: `assets/images/bishop_${type}.png`, horizontalPosition: 5, verticalPosition: verticalPosition});
+pieces.push({image: `assets/images/queen_${type}.png`, horizontalPosition: 3, verticalPosition: verticalPosition});
+pieces.push({image: `assets/images/king_${type}.png`, horizontalPosition: 4, verticalPosition: verticalPosition});
+}
+
 for (let i = 0; i < 8; i++) {
     pieces.push({image: "assets/images/pawn_b.png", horizontalPosition: i, verticalPosition: 6});
 }
@@ -19,43 +33,6 @@ for (let i = 0; i < 8; i++) {
 for (let i = 0; i < 8; i++) {
     pieces.push({image: "assets/images/pawn_w.png", horizontalPosition: i, verticalPosition: 1});
 }
-
-// rooks
-
-pieces.push({image: "assets/images/rook_b.png", horizontalPosition: 0, verticalPosition: 7});
-pieces.push({image: "assets/images/rook_b.png", horizontalPosition: 7, verticalPosition: 7});
-
-pieces.push({image: "assets/images/rook_w.png", horizontalPosition: 0, verticalPosition: 0});
-pieces.push({image: "assets/images/rook_w.png", horizontalPosition: 7, verticalPosition: 0});
-
-// knights
-
-pieces.push({image: "assets/images/knight_b.png", horizontalPosition: 1, verticalPosition: 7});
-pieces.push({image: "assets/images/knight_b.png", horizontalPosition: 6, verticalPosition: 7});
-
-pieces.push({image: "assets/images/knight_w.png", horizontalPosition: 1, verticalPosition: 0});
-pieces.push({image: "assets/images/knight_w.png", horizontalPosition: 6, verticalPosition: 0});
-
-// bishops
-
-pieces.push({image: "assets/images/bishop_b.png", horizontalPosition: 2, verticalPosition: 7});
-pieces.push({image: "assets/images/bishop_b.png", horizontalPosition: 5, verticalPosition: 7});
-
-pieces.push({image: "assets/images/bishop_w.png", horizontalPosition: 2, verticalPosition: 0});
-pieces.push({image: "assets/images/bishop_w.png", horizontalPosition: 5, verticalPosition: 0});
-
-// queens
-
-pieces.push({image: "assets/images/queen_b.png", horizontalPosition: 3, verticalPosition: 7});
-
-pieces.push({image: "assets/images/queen_w.png", horizontalPosition: 3, verticalPosition: 0});
-
-// kings
-
-pieces.push({image: "assets/images/king_b.png", horizontalPosition: 4, verticalPosition: 7});
-
-pieces.push({image: "assets/images/king_w.png", horizontalPosition: 4, verticalPosition: 0});
-
 
 export default function Chessboard() {
     let board = [];
