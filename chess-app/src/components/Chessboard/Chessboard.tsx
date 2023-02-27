@@ -1,6 +1,7 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import Tile from "../Tile/Tile";
 import './Chessboard.css';
+import Referee from "../../referee/Referee"; 
 
 const verticalAxis = ["1", "2", "3", "4", "5", "6", "7", "8"];
 const horizontalAxis = ["a", "b", "c", "d", "e", "f", "g", "h"];
@@ -9,6 +10,16 @@ interface Piece {
     image: string;
     horizontalPosition: number;
     verticalPosition: number;
+    type: PieceType;
+}
+
+export enum PieceType {
+    PAWN,
+    BISHOP,
+    KNIGHT,
+    ROOK,
+    QUEEN,
+    KING
 }
 
 const initialBoardState: Piece[] = []
@@ -17,22 +28,22 @@ for (let p = 0; p < 2; p++) {
     const type = p === 0 ? "b" : "w";
     const verticalPosition = (p === 0) ? 7 : 0;
 
-initialBoardState.push({image: `assets/images/rook_${type}.png`, horizontalPosition: 0, verticalPosition: verticalPosition});
-initialBoardState.push({image: `assets/images/rook_${type}.png`, horizontalPosition: 7, verticalPosition: verticalPosition});
-initialBoardState.push({image: `assets/images/knight_${type}.png`, horizontalPosition: 1, verticalPosition: verticalPosition});
-initialBoardState.push({image: `assets/images/knight_${type}.png`, horizontalPosition: 6, verticalPosition: verticalPosition});
-initialBoardState.push({image: `assets/images/bishop_${type}.png`, horizontalPosition: 2, verticalPosition: verticalPosition});
-initialBoardState.push({image: `assets/images/bishop_${type}.png`, horizontalPosition: 5, verticalPosition: verticalPosition});
-initialBoardState.push({image: `assets/images/queen_${type}.png`, horizontalPosition: 3, verticalPosition: verticalPosition});
-initialBoardState.push({image: `assets/images/king_${type}.png`, horizontalPosition: 4, verticalPosition: verticalPosition});
+initialBoardState.push({image: `assets/images/rook_${type}.png`, horizontalPosition: 0, verticalPosition: verticalPosition, type: PieceType.ROOK});
+initialBoardState.push({image: `assets/images/rook_${type}.png`, horizontalPosition: 7, verticalPosition: verticalPosition, type: PieceType.ROOK});
+initialBoardState.push({image: `assets/images/knight_${type}.png`, horizontalPosition: 1, verticalPosition: verticalPosition, type: PieceType.KNIGHT});
+initialBoardState.push({image: `assets/images/knight_${type}.png`, horizontalPosition: 6, verticalPosition: verticalPosition, type: PieceType.KNIGHT});
+initialBoardState.push({image: `assets/images/bishop_${type}.png`, horizontalPosition: 2, verticalPosition: verticalPosition, type: PieceType.BISHOP});
+initialBoardState.push({image: `assets/images/bishop_${type}.png`, horizontalPosition: 5, verticalPosition: verticalPosition, type: PieceType.BISHOP});
+initialBoardState.push({image: `assets/images/queen_${type}.png`, horizontalPosition: 3, verticalPosition: verticalPosition, type: PieceType.QUEEN});
+initialBoardState.push({image: `assets/images/king_${type}.png`, horizontalPosition: 4, verticalPosition: verticalPosition, type: PieceType.KING});
 }
 
 for (let i = 0; i < 8; i++) {
-    initialBoardState.push({image: "assets/images/pawn_b.png", horizontalPosition: i, verticalPosition: 6});
+    initialBoardState.push({image: "assets/images/pawn_b.png", horizontalPosition: i, verticalPosition: 6, type: PieceType.PAWN});
 }
 
 for (let i = 0; i < 8; i++) {
-    initialBoardState.push({image: "assets/images/pawn_w.png", horizontalPosition: i, verticalPosition: 1});
+    initialBoardState.push({image: "assets/images/pawn_w.png", horizontalPosition: i, verticalPosition: 1, type: PieceType.PAWN});
 }
 
 export default function Chessboard() {
@@ -41,6 +52,7 @@ export default function Chessboard() {
     const [gridY, setGridY] = useState(0);
     const [pieces, setPieces] = useState<Piece[]>(initialBoardState);
     const chessboardRef = useRef<HTMLDivElement>(null);
+    const referee = new Referee();
 
     function grabPiece(e: React.MouseEvent) {
         const element = e.target as HTMLElement;
@@ -99,11 +111,13 @@ export default function Chessboard() {
         if (activePiece && chessboard) {
             const x = Math.floor((e.clientX - chessboard.offsetLeft) / 100);
             const y = Math.abs(Math.ceil((e.clientY - chessboard.offsetTop - 800) / 100));
-            console.log(x, y);
-    
+
+            // Updates the piece position
             setPieces(value => {
                 const pieces = value.map((p) => {
                     if (p.horizontalPosition === gridX && p.verticalPosition === gridY) {
+                        referee.isValidMove(gridX, gridY, x, y, p.type);
+
                         p.horizontalPosition = x;
                         p.verticalPosition = y;
                     }
