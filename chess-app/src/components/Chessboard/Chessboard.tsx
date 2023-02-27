@@ -6,11 +6,17 @@ import Referee from "../../referee/Referee";
 const verticalAxis = ["1", "2", "3", "4", "5", "6", "7", "8"];
 const horizontalAxis = ["a", "b", "c", "d", "e", "f", "g", "h"];
 
-interface Piece {
+export interface Piece {
     image: string;
     horizontalPosition: number;
     verticalPosition: number;
     type: PieceType;
+    team: TeamType;
+}
+
+export enum TeamType {
+    OPPONENT,
+    OUR
 }
 
 export enum PieceType {
@@ -25,25 +31,26 @@ export enum PieceType {
 const initialBoardState: Piece[] = []
 
 for (let p = 0; p < 2; p++) {
-    const type = p === 0 ? "b" : "w";
-    const verticalPosition = (p === 0) ? 7 : 0;
+    const teamType = (p === 0) ? TeamType.OPPONENT : TeamType.OUR
+    const type = (teamType === TeamType.OPPONENT) ? "b" : "w";
+    const verticalPosition = (teamType === TeamType.OPPONENT) ? 7 : 0;
 
-initialBoardState.push({image: `assets/images/rook_${type}.png`, horizontalPosition: 0, verticalPosition: verticalPosition, type: PieceType.ROOK});
-initialBoardState.push({image: `assets/images/rook_${type}.png`, horizontalPosition: 7, verticalPosition: verticalPosition, type: PieceType.ROOK});
-initialBoardState.push({image: `assets/images/knight_${type}.png`, horizontalPosition: 1, verticalPosition: verticalPosition, type: PieceType.KNIGHT});
-initialBoardState.push({image: `assets/images/knight_${type}.png`, horizontalPosition: 6, verticalPosition: verticalPosition, type: PieceType.KNIGHT});
-initialBoardState.push({image: `assets/images/bishop_${type}.png`, horizontalPosition: 2, verticalPosition: verticalPosition, type: PieceType.BISHOP});
-initialBoardState.push({image: `assets/images/bishop_${type}.png`, horizontalPosition: 5, verticalPosition: verticalPosition, type: PieceType.BISHOP});
-initialBoardState.push({image: `assets/images/queen_${type}.png`, horizontalPosition: 3, verticalPosition: verticalPosition, type: PieceType.QUEEN});
-initialBoardState.push({image: `assets/images/king_${type}.png`, horizontalPosition: 4, verticalPosition: verticalPosition, type: PieceType.KING});
+initialBoardState.push({image: `assets/images/rook_${type}.png`, horizontalPosition: 0, verticalPosition: verticalPosition, type: PieceType.ROOK, team: teamType});
+initialBoardState.push({image: `assets/images/rook_${type}.png`, horizontalPosition: 7, verticalPosition: verticalPosition, type: PieceType.ROOK, team: teamType});
+initialBoardState.push({image: `assets/images/knight_${type}.png`, horizontalPosition: 1, verticalPosition: verticalPosition, type: PieceType.KNIGHT, team: teamType});
+initialBoardState.push({image: `assets/images/knight_${type}.png`, horizontalPosition: 6, verticalPosition: verticalPosition, type: PieceType.KNIGHT, team: teamType});
+initialBoardState.push({image: `assets/images/bishop_${type}.png`, horizontalPosition: 2, verticalPosition: verticalPosition, type: PieceType.BISHOP, team: teamType});
+initialBoardState.push({image: `assets/images/bishop_${type}.png`, horizontalPosition: 5, verticalPosition: verticalPosition, type: PieceType.BISHOP, team: teamType});
+initialBoardState.push({image: `assets/images/queen_${type}.png`, horizontalPosition: 3, verticalPosition: verticalPosition, type: PieceType.QUEEN, team: teamType});
+initialBoardState.push({image: `assets/images/king_${type}.png`, horizontalPosition: 4, verticalPosition: verticalPosition, type: PieceType.KING, team: teamType});
 }
 
 for (let i = 0; i < 8; i++) {
-    initialBoardState.push({image: "assets/images/pawn_b.png", horizontalPosition: i, verticalPosition: 6, type: PieceType.PAWN});
+    initialBoardState.push({image: "assets/images/pawn_b.png", horizontalPosition: i, verticalPosition: 6, type: PieceType.PAWN, team: TeamType.OPPONENT});
 }
 
 for (let i = 0; i < 8; i++) {
-    initialBoardState.push({image: "assets/images/pawn_w.png", horizontalPosition: i, verticalPosition: 1, type: PieceType.PAWN});
+    initialBoardState.push({image: "assets/images/pawn_w.png", horizontalPosition: i, verticalPosition: 1, type: PieceType.PAWN, team: TeamType.OUR});
 }
 
 export default function Chessboard() {
@@ -116,10 +123,16 @@ export default function Chessboard() {
             setPieces(value => {
                 const pieces = value.map((p) => {
                     if (p.horizontalPosition === gridX && p.verticalPosition === gridY) {
-                        referee.isValidMove(gridX, gridY, x, y, p.type);
+                        const validMove = referee.isValidMove(gridX, gridY, x, y, p.type, p.team, value);
 
+                        if (validMove) {
                         p.horizontalPosition = x;
                         p.verticalPosition = y;
+                        } else {
+                          activePiece.style.position = 'relative';
+                          activePiece.style.removeProperty('top');
+                          activePiece.style.removeProperty('left');
+                        }
                     }
                     return p;
                 })
