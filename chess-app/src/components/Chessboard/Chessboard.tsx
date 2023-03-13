@@ -67,13 +67,11 @@ export default function Chessboard() {
     function dropPiece(e: React.MouseEvent) {
         const chessboard = chessboardRef.current;
         if (activePiece && chessboard) {
-            const x = Math.floor((e.clientX - chessboard.offsetLeft) / 100);
-            const y = Math.abs(Math.ceil((e.clientY - chessboard.offsetTop - 800) / 100));
+            const x = Math.floor((e.clientX - chessboard.offsetLeft) / gridSize);
+            const y = Math.abs(Math.ceil((e.clientY - chessboard.offsetTop - 800) / gridSize));
 
             const currentPiece = pieces.find(
                 (p) => p.position.horizontalPosition === grabPosition.horizontalPosition && p.position.verticalPosition === grabPosition?.verticalPosition);
-            const attackedPiece = pieces.find(
-                (p) => p.position.horizontalPosition === x && p.position.verticalPosition === y);
 
             if (currentPiece) {
                 const validMove = referee.isValidMove(grabPosition.horizontalPosition, grabPosition.verticalPosition, x, y, currentPiece.type, currentPiece.team, pieces);
@@ -107,9 +105,6 @@ export default function Chessboard() {
                     // UPDATES THE PIECE POSITION
                     // REMOVES ATTACKED PIECES
 
-                    // setPieces((value) => return updatedPieces)
-                    // setPieces(updatedPieces)
-
                     const updatedPieces = pieces.reduce((results, piece) => {
 
                         if (piece.position.horizontalPosition === grabPosition.horizontalPosition && piece.position.verticalPosition === grabPosition.verticalPosition) {
@@ -133,23 +128,6 @@ export default function Chessboard() {
 
                     setPieces(updatedPieces);
 
-                    // setPieces((value) => {
-                    //     const pieces = value.reduce((results, piece) => {
-
-                    //         if (piece.horizontalPosition === currentPiece.horizontalPosition && piece.verticalPosition === currentPiece.verticalPosition) {
-                    //             piece.horizontalPosition = x;
-                    //             piece.verticalPosition = y;
-
-                    //             results.push(piece);
-                    //         } else if (!(piece.horizontalPosition === x && piece.horizontalPosition === y)) {
-                    //             results.push(piece);
-                    //         }
-
-                    //         return results;
-                    //     }, [] as Piece[])
-
-                    //     return pieces
-                    // })
                 } else {
                     // RESETS THE PIECE POSITION
                     activePiece.style.position = 'relative';
