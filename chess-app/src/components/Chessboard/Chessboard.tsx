@@ -119,25 +119,62 @@ export default function Chessboard() {
             const x = Math.floor((e.clientX - chessboard.offsetLeft) / 100);
             const y = Math.abs(Math.ceil((e.clientY - chessboard.offsetTop - 800) / 100));
 
-            // Updates the piece position
-            setPieces(value => {
-                const pieces = value.map((p) => {
-                    if (p.horizontalPosition === gridX && p.verticalPosition === gridY) {
-                        const validMove = referee.isValidMove(gridX, gridY, x, y, p.type, p.team, value);
+            const currentPiece = pieces.find((p) => p.horizontalPosition === gridX && p.verticalPosition === gridY);
+            const attackedPiece = pieces.find((p) => p.horizontalPosition === x && p.verticalPosition === y);
 
-                        if (validMove) {
-                        p.horizontalPosition = x;
-                        p.verticalPosition = y;
-                        } else {
-                          activePiece.style.position = 'relative';
-                          activePiece.style.removeProperty('top');
-                          activePiece.style.removeProperty('left');
+            if (currentPiece) {
+                const validMove = referee.isValidMove(gridX, gridY, x, y, currentPiece.type, currentPiece.team, pieces);
+
+                // REDUCE FUNCTION
+                // RESULTS => Array of results
+                // PIECE => The current piece we are handling
+
+                if (validMove) {
+                    // UPDATES THE PIECE POSITION
+                    // REMOVES ATTACKED PIECES
+
+                    // setPieces((value) => return updatedPieces)
+                    // setPieces(updatedPieces)
+
+                    const updatedPieces = pieces.reduce((results, piece) => {
+
+                        if (piece.horizontalPosition === currentPiece.horizontalPosition && piece.verticalPosition === currentPiece.verticalPosition) {
+                            piece.horizontalPosition = x;
+                            piece.verticalPosition = y;
+                            results.push(piece);
+                        } else if (!(piece.horizontalPosition === x && piece.verticalPosition === y)) {
+                            results.push(piece);
                         }
-                    }
-                    return p;
-                })
-                return pieces;
-            })
+
+                        return results;
+                    }, [] as Piece[]);
+
+                    setPieces(updatedPieces);
+
+                    // setPieces((value) => {
+                    //     const pieces = value.reduce((results, piece) => {
+
+                    //         if (piece.horizontalPosition === currentPiece.horizontalPosition && piece.verticalPosition === currentPiece.verticalPosition) {
+                    //             piece.horizontalPosition = x;
+                    //             piece.verticalPosition = y;
+
+                    //             results.push(piece);
+                    //         } else if (!(piece.horizontalPosition === x && piece.horizontalPosition === y)) {
+                    //             results.push(piece);
+                    //         }
+
+                    //         return results;
+                    //     }, [] as Piece[])
+
+                    //     return pieces
+                    // })
+                } else {
+                    // RESETS THE PIECE POSITION
+                    activePiece.style.position = 'relative';
+                    activePiece.style.removeProperty('top');
+                    activePiece.style.removeProperty('left');
+                }
+            }            
             setActivePiece(null);
         }
     } 
