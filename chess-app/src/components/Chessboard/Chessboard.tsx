@@ -1,58 +1,8 @@
 import React, { useRef, useState } from "react";
-import Tile from "../Tile/Tile";
 import './Chessboard.css';
+import Tile from "../Tile/Tile";
 import Referee from "../../referee/Referee"; 
-
-const verticalAxis = ["1", "2", "3", "4", "5", "6", "7", "8"];
-const horizontalAxis = ["a", "b", "c", "d", "e", "f", "g", "h"];
-
-export interface Piece {
-    image: string;
-    horizontalPosition: number;
-    verticalPosition: number;
-    type: PieceType;
-    team: TeamType;
-    enPassant?: boolean;
-}
-
-export enum TeamType {
-    OPPONENT,
-    OUR
-}
-
-export enum PieceType {
-    PAWN,
-    BISHOP,
-    KNIGHT,
-    ROOK,
-    QUEEN,
-    KING
-}
-
-const initialBoardState: Piece[] = []
-
-for (let p = 0; p < 2; p++) {
-    const teamType = (p === 0) ? TeamType.OPPONENT : TeamType.OUR
-    const type = (teamType === TeamType.OPPONENT) ? "b" : "w";
-    const verticalPosition = (teamType === TeamType.OPPONENT) ? 7 : 0;
-
-initialBoardState.push({image: `assets/images/rook_${type}.png`, horizontalPosition: 0, verticalPosition: verticalPosition, type: PieceType.ROOK, team: teamType});
-initialBoardState.push({image: `assets/images/rook_${type}.png`, horizontalPosition: 7, verticalPosition: verticalPosition, type: PieceType.ROOK, team: teamType});
-initialBoardState.push({image: `assets/images/knight_${type}.png`, horizontalPosition: 1, verticalPosition: verticalPosition, type: PieceType.KNIGHT, team: teamType});
-initialBoardState.push({image: `assets/images/knight_${type}.png`, horizontalPosition: 6, verticalPosition: verticalPosition, type: PieceType.KNIGHT, team: teamType});
-initialBoardState.push({image: `assets/images/bishop_${type}.png`, horizontalPosition: 2, verticalPosition: verticalPosition, type: PieceType.BISHOP, team: teamType});
-initialBoardState.push({image: `assets/images/bishop_${type}.png`, horizontalPosition: 5, verticalPosition: verticalPosition, type: PieceType.BISHOP, team: teamType});
-initialBoardState.push({image: `assets/images/queen_${type}.png`, horizontalPosition: 3, verticalPosition: verticalPosition, type: PieceType.QUEEN, team: teamType});
-initialBoardState.push({image: `assets/images/king_${type}.png`, horizontalPosition: 4, verticalPosition: verticalPosition, type: PieceType.KING, team: teamType});
-}
-
-for (let i = 0; i < 8; i++) {
-    initialBoardState.push({image: "assets/images/pawn_b.png", horizontalPosition: i, verticalPosition: 6, type: PieceType.PAWN, team: TeamType.OPPONENT});
-}
-
-for (let i = 0; i < 8; i++) {
-    initialBoardState.push({image: "assets/images/pawn_w.png", horizontalPosition: i, verticalPosition: 1, type: PieceType.PAWN, team: TeamType.OUR});
-}
+import {verticalAxis, horizontalAxis, Piece, PieceType, TeamType, initialBoardState} from "../../Constants";
 
 export default function Chessboard() {
     const [activePiece, setActivePiece] = useState<HTMLElement | null>(null);
