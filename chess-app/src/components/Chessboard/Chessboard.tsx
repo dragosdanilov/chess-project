@@ -138,7 +138,7 @@ export default function Chessboard() {
 
                     const updatedPieces = pieces.reduce((results, piece) => {
 
-                        if (piece.horizontalPosition === currentPiece.horizontalPosition && piece.verticalPosition === currentPiece.verticalPosition) {
+                        if (piece.horizontalPosition === gridX && piece.verticalPosition === gridY) {
                             piece.horizontalPosition = x;
                             piece.verticalPosition = y;
                             results.push(piece);
