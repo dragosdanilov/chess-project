@@ -133,7 +133,25 @@ export default function Chessboard() {
                 const isEnPassantMove = referee.isEnPassantMove(gridX, gridY, x, y, currentPiece.type, currentPiece.team, pieces
                 )
 
-                if (validMove) {
+                const pawnDirection = currentPiece.team === TeamType.OUR ? 1 : -1;
+                if(isEnPassantMove) {
+                    const updatedPieces = pieces.reduce((results, piece) => {
+                        if (piece.horizontalPosition === gridX && piece.verticalPosition === gridY) {
+                            piece.enPassant = false;
+                            piece.horizontalPosition = x;
+                            piece.verticalPosition = y;
+                            results.push(piece);
+                        } else if (!(piece.horizontalPosition === x && piece.verticalPosition === y - pawnDirection)) {
+                            if (piece.type === PieceType.PAWN) {
+                                piece.enPassant = false;
+                            }
+                            results.push(piece);
+                        }
+                        return results;
+                    }, [] as Piece[])
+
+                    setPieces(updatedPieces);
+                } else if (validMove) {
                     // UPDATES THE PIECE POSITION
                     // REMOVES ATTACKED PIECES
 

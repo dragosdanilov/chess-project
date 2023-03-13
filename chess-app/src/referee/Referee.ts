@@ -27,7 +27,9 @@ export default class Referee {
         if (type === PieceType.PAWN) {
             if ((x - px === -1 || x - px === 1) && y - py === pawnDirection) {
                 const piece = boardState.find(p => p.horizontalPosition === x && p.verticalPosition === y - pawnDirection && p.enPassant);
-                console.log(piece);
+                if (piece) {
+                    return true;
+                }
             } 
         }
 
@@ -37,7 +39,8 @@ export default class Referee {
         // if a piece is under / above attacked tile DONE
         // if the attacked piece has moved two spaces at once in the previous turn and not the current one DONE
 
-        const piece = boardState.find(p => p.horizontalPosition === x && p.verticalPosition === y + pawnDirection);
+        // Put attacking piece in correct position
+        // Remove en passanted piece
 
         return false;
     }
