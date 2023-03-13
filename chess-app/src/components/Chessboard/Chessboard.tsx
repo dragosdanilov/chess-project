@@ -2,7 +2,7 @@ import React, { useRef, useState } from "react";
 import './Chessboard.css';
 import Tile from "../Tile/Tile";
 import Referee from "../../referee/Referee"; 
-import {verticalAxis, horizontalAxis, Piece, PieceType, TeamType, initialBoardState, Position} from "../../Constants";
+import {verticalAxis, horizontalAxis, Piece, PieceType, TeamType, initialBoardState, Position, gridSize} from "../../Constants";
 
 export default function Chessboard() {
     const [activePiece, setActivePiece] = useState<HTMLElement | null>(null);
@@ -15,11 +15,11 @@ export default function Chessboard() {
         const element = e.target as HTMLElement;
         const chessboard = chessboardRef.current;
         if(element.classList.contains("chess-piece") && chessboard) {
-            const grabX = Math.floor((e.clientX - chessboard.offsetLeft) / 100)
-            const grabY = Math.abs(Math.ceil((e.clientY - chessboard.offsetTop - 800) / 100))
+            const grabX = Math.floor((e.clientX - chessboard.offsetLeft) / gridSize)
+            const grabY = Math.abs(Math.ceil((e.clientY - chessboard.offsetTop - 800) / gridSize))
             setGrabPosition({horizontalPosition: grabX, verticalPosition: grabY});
-            const x = e.clientX - 50;
-            const y = e.clientY - 50;
+            const x = e.clientX - gridSize/2;
+            const y = e.clientY - gridSize/2;
             element.style.position = "absolute";
             element.style.left = `${x}px`;
             element.style.top = `${y}px`;
@@ -167,13 +167,8 @@ export default function Chessboard() {
     for (let j = verticalAxis.length - 1; j >= 0; j--) {
         for (let i = 0; i < horizontalAxis.length; i++) {
             const tileNumber = j + i + 2;
-            let image = undefined;
-
-            pieces.forEach(p => {
-                if (p.position.horizontalPosition === i && p.position.verticalPosition === j) {
-                    image = p.image;
-                }
-            })
+            const piece = pieces.find(p => p.position.horizontalPosition === i && p.position.verticalPosition === j)
+            let image = piece ? piece.image : undefined;
 
             board.push(<Tile key={`${j},${i}`} image={image} number={tileNumber} />);
         }
