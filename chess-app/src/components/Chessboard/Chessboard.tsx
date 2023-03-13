@@ -12,6 +12,7 @@ export interface Piece {
     verticalPosition: number;
     type: PieceType;
     team: TeamType;
+    enPassant?: boolean;
 }
 
 export enum TeamType {
@@ -129,6 +130,9 @@ export default function Chessboard() {
                 // RESULTS => Array of results
                 // PIECE => The current piece we are handling
 
+                const isEnPassantMove = referee.isEnPassantMove(gridX, gridY, x, y, currentPiece.type, currentPiece.team, pieces
+                )
+
                 if (validMove) {
                     // UPDATES THE PIECE POSITION
                     // REMOVES ATTACKED PIECES
@@ -139,10 +143,18 @@ export default function Chessboard() {
                     const updatedPieces = pieces.reduce((results, piece) => {
 
                         if (piece.horizontalPosition === gridX && piece.verticalPosition === gridY) {
+                            if (Math.abs(gridY - y) === 2 && piece.type === PieceType.PAWN) {
+                                piece.enPassant = true;
+                            } else {
+                                piece.enPassant = false;
+                            }
                             piece.horizontalPosition = x;
                             piece.verticalPosition = y;
                             results.push(piece);
                         } else if (!(piece.horizontalPosition === x && piece.verticalPosition === y)) {
+                            if (piece.type === PieceType.PAWN) {
+                                piece.enPassant = false;
+                            }
                             results.push(piece);
                         }
 
