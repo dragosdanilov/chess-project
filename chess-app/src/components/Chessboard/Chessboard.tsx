@@ -2,7 +2,7 @@ import React, { useRef, useState } from "react";
 import './Chessboard.css';
 import Tile from "../Tile/Tile";
 import Referee from "../../referee/Referee"; 
-import {verticalAxis, horizontalAxis, Piece, PieceType, TeamType, initialBoardState, Position, gridSize} from "../../Constants";
+import {verticalAxis, horizontalAxis, gridSize, Piece, PieceType, TeamType, initialBoardState, Position, samePosition} from "../../Constants";
 
 export default function Chessboard() {
     const [activePiece, setActivePiece] = useState<HTMLElement | null>(null);
@@ -54,7 +54,7 @@ export default function Chessboard() {
             if(y < minY) {
                 activePiece.style.top = `${minY}px`;
             // if y is bigger than maximum amount
-            } else if (x > maxX) {
+            } else if (y > maxY) {
                 activePiece.style.top = `${maxY}px`;
             // if y is in the constraints
             } else {
@@ -71,7 +71,8 @@ export default function Chessboard() {
             const y = Math.abs(Math.ceil((e.clientY - chessboard.offsetTop - 800) / gridSize));
 
             const currentPiece = pieces.find(
-                (p) => p.position.horizontalPosition === grabPosition.horizontalPosition && p.position.verticalPosition === grabPosition?.verticalPosition);
+                (p) => samePosition (p.position, grabPosition)
+            );
 
             if (currentPiece) {
                 const validMove = referee.isValidMove(grabPosition.horizontalPosition, grabPosition.verticalPosition, x, y, currentPiece.type, currentPiece.team, pieces);
@@ -84,14 +85,17 @@ export default function Chessboard() {
                 )
 
                 const pawnDirection = currentPiece.team === TeamType.OUR ? 1 : -1;
+
                 if(isEnPassantMove) {
                     const updatedPieces = pieces.reduce((results, piece) => {
-                        if (piece.position.horizontalPosition === grabPosition.horizontalPosition && piece.position.verticalPosition === grabPosition.verticalPosition) {
+                        if (
+                            samePosition(piece.position, grabPosition)
+                        ) {
                             piece.enPassant = false;
                             piece.position.horizontalPosition = x;
                             piece.position.verticalPosition = y;
                             results.push(piece);
-                        } else if (!(piece.position.horizontalPosition === x && piece.position.verticalPosition === y - pawnDirection)) {
+                        } else if (!(samePosition(piece.position, {horizontalPosition: x, verticalPosition: y-pawnDirection}))) {
                             if (piece.type === PieceType.PAWN) {
                                 piece.enPassant = false;
                             }
@@ -107,8 +111,14 @@ export default function Chessboard() {
 
                     const updatedPieces = pieces.reduce((results, piece) => {
 
-                        if (piece.position.horizontalPosition === grabPosition.horizontalPosition && piece.position.verticalPosition === grabPosition.verticalPosition) {
-                            if (Math.abs(grabPosition.verticalPosition - y) === 2 && piece.type === PieceType.PAWN) {
+                        if (
+                            samePosition(piece.position, grabPosition)
+                        ) {
+                            if (
+                                Math.abs(grabPosition.verticalPosition - y) === 2 && 
+                                piece.type === PieceType.PAWN
+                            ) {
+                                // SPECIAL MOVE
                                 piece.enPassant = true;
                             } else {
                                 piece.enPassant = false;
@@ -116,7 +126,7 @@ export default function Chessboard() {
                             piece.position.horizontalPosition = x;
                             piece.position.verticalPosition = y;
                             results.push(piece);
-                        } else if (!(piece.position.horizontalPosition === x && piece.position.verticalPosition === y)) {
+                        } else if (!(samePosition(piece.position, {horizontalPosition: x, verticalPosition: y}))) {
                             if (piece.type === PieceType.PAWN) {
                                 piece.enPassant = false;
                             }
@@ -145,7 +155,9 @@ export default function Chessboard() {
     for (let j = verticalAxis.length - 1; j >= 0; j--) {
         for (let i = 0; i < horizontalAxis.length; i++) {
             const tileNumber = j + i + 2;
-            const piece = pieces.find(p => p.position.horizontalPosition === i && p.position.verticalPosition === j)
+            const piece = pieces.find(
+                (p) => samePosition(p.position, {horizontalPosition: i, verticalPosition: j})
+            );
             let image = piece ? piece.image : undefined;
 
             board.push(<Tile key={`${j},${i}`} image={image} number={tileNumber} />);
