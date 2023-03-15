@@ -75,13 +75,13 @@ export default function Chessboard() {
             );
 
             if (currentPiece) {
-                const validMove = referee.isValidMove(grabPosition.horizontalPosition, grabPosition.verticalPosition, x, y, currentPiece.type, currentPiece.team, pieces);
+                const validMove = referee.isValidMove(grabPosition, {horizontalPosition: x, verticalPosition: y}, currentPiece.type, currentPiece.team, pieces);
 
                 // REDUCE FUNCTION
                 // RESULTS => Array of results
                 // PIECE => The current piece we are handling
 
-                const isEnPassantMove = referee.isEnPassantMove(grabPosition.horizontalPosition, grabPosition.verticalPosition, x, y, currentPiece.type, currentPiece.team, pieces
+                const isEnPassantMove = referee.isEnPassantMove(grabPosition, {horizontalPosition: x, verticalPosition: y}, currentPiece.type, currentPiece.team, pieces
                 )
 
                 const pawnDirection = currentPiece.team === TeamType.OUR ? 1 : -1;
