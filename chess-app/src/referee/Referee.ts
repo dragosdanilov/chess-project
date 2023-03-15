@@ -57,7 +57,7 @@ export default class Referee {
             const specialRow = (team === TeamType.OUR) ? 1 : 6;
             const pawnDirection = (team === TeamType.OUR) ? 1 : -1;
 
-            // MOVEMENT LOGIC
+            // MOVEMENT LOGIC FOR THE PAWN
             if (initialPosition.horizontalPosition === desiredPosition.horizontalPosition && initialPosition.verticalPosition === specialRow && desiredPosition.verticalPosition - initialPosition.verticalPosition === 2 * pawnDirection) {
                 if (!this.tileIsOccupied(desiredPosition.horizontalPosition, desiredPosition.verticalPosition, boardState) && !this.tileIsOccupied(desiredPosition.horizontalPosition, desiredPosition.verticalPosition - pawnDirection, boardState)) {
                     return true;
@@ -79,6 +79,45 @@ export default class Referee {
                 console.log("upper / bottom right");
                 if (this.tileIsOccupiedByOpponent(desiredPosition.horizontalPosition, desiredPosition.verticalPosition, boardState, team)) {
                     return true;
+                }
+            }
+        } else if (type === PieceType.KNIGHT) {
+            // MOVEMENT LOGIC FOR THE KNIGHT
+            // 8 different moving patterns
+
+            // TOP LINE
+            if (desiredPosition.verticalPosition - initialPosition.verticalPosition === 2) {
+                if (desiredPosition.horizontalPosition - initialPosition.horizontalPosition === -1) {
+                    console.log('top left');
+                } else if (desiredPosition.horizontalPosition - initialPosition.horizontalPosition === 1) {
+                    console.log('top right');
+                }
+            }
+
+            // RIGHT LINE
+            if (desiredPosition.horizontalPosition - initialPosition.horizontalPosition === 2) {
+                if (desiredPosition.verticalPosition - initialPosition.verticalPosition === 1) {
+                    console.log('right up');
+                } else if (desiredPosition.verticalPosition - initialPosition.verticalPosition === -1) {
+                    console.log('right down');
+                }
+            }
+
+            // LEFT LINE
+            if (desiredPosition.horizontalPosition - initialPosition.horizontalPosition === -2) {
+                if (desiredPosition.verticalPosition - initialPosition.verticalPosition === 1) {
+                    console.log('left up');
+                } else if (desiredPosition.verticalPosition - initialPosition.verticalPosition === -1) {
+                    console.log('left down');
+                }
+            }
+
+            // BOTTOM LINE
+            if (desiredPosition.verticalPosition - initialPosition.verticalPosition === -2) {
+                if (desiredPosition.horizontalPosition - initialPosition.horizontalPosition === -1) {
+                    console.log('bottom left');
+                } else if (desiredPosition.horizontalPosition - initialPosition.horizontalPosition === 1) {
+                    console.log('bottom right')
                 }
             }
         }
