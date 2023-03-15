@@ -85,39 +85,20 @@ export default class Referee {
             // MOVEMENT LOGIC FOR THE KNIGHT
             // 8 different moving patterns
 
-            // TOP LINE
-            if (desiredPosition.verticalPosition - initialPosition.verticalPosition === 2) {
-                if (desiredPosition.horizontalPosition - initialPosition.horizontalPosition === -1) {
-                    console.log('top left');
-                } else if (desiredPosition.horizontalPosition - initialPosition.horizontalPosition === 1) {
-                    console.log('top right');
-                }
-            }
-
-            // RIGHT LINE
-            if (desiredPosition.horizontalPosition - initialPosition.horizontalPosition === 2) {
-                if (desiredPosition.verticalPosition - initialPosition.verticalPosition === 1) {
-                    console.log('right up');
-                } else if (desiredPosition.verticalPosition - initialPosition.verticalPosition === -1) {
-                    console.log('right down');
-                }
-            }
-
-            // LEFT LINE
-            if (desiredPosition.horizontalPosition - initialPosition.horizontalPosition === -2) {
-                if (desiredPosition.verticalPosition - initialPosition.verticalPosition === 1) {
-                    console.log('left up');
-                } else if (desiredPosition.verticalPosition - initialPosition.verticalPosition === -1) {
-                    console.log('left down');
-                }
-            }
-
-            // BOTTOM LINE
-            if (desiredPosition.verticalPosition - initialPosition.verticalPosition === -2) {
-                if (desiredPosition.horizontalPosition - initialPosition.horizontalPosition === -1) {
-                    console.log('bottom left');
-                } else if (desiredPosition.horizontalPosition - initialPosition.horizontalPosition === 1) {
-                    console.log('bottom right')
+            for (let i = -1; i < 2; i += 2) {
+                for (let j = -1; j < 2; j += 2) {
+                    // TOP & BOTTOM LINE MOVEMENT
+                    if (desiredPosition.verticalPosition - initialPosition.verticalPosition === 2 * i) {
+                        if (desiredPosition.horizontalPosition - initialPosition.horizontalPosition === j) {
+                        console.log('top/bottom left/right left');
+                        }
+                    }
+                    // RIGHT & LEFT LINE MOVEMENT
+                    if (desiredPosition.horizontalPosition - initialPosition.horizontalPosition === 2 * i) {
+                        if (desiredPosition.verticalPosition - initialPosition.verticalPosition === j) {
+                            console.log('right/left upper/lower');
+                        }
+                    }
                 }
             }
         }
