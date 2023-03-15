@@ -114,15 +114,11 @@ export default function Chessboard() {
                         if (
                             samePosition(piece.position, grabPosition)
                         ) {
-                            if (
+                            // SPECIAL MOVE
+                            piece.enPassant = 
                                 Math.abs(grabPosition.verticalPosition - y) === 2 && 
-                                piece.type === PieceType.PAWN
-                            ) {
-                                // SPECIAL MOVE
-                                piece.enPassant = true;
-                            } else {
-                                piece.enPassant = false;
-                            }
+                                piece.type === PieceType.PAWN;
+                                
                             piece.position.horizontalPosition = x;
                             piece.position.verticalPosition = y;
                             results.push(piece);
