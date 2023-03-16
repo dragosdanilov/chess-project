@@ -140,6 +140,40 @@ export default class Referee {
                     }
                 }
             }
+        } else if (type === PieceType.BISHOP) {
+            // MOVEMENT LOGIC FOR THE BISHOP
+
+            // Top-right movement
+            for (let i = 1; i < 8; i++) {
+                if (desiredPosition.horizontalPosition -  initialPosition.horizontalPosition === i && desiredPosition.verticalPosition - initialPosition.verticalPosition === i) {
+                    console.log(`Moving top right ${i} tile(s)`)
+                    break;
+                }
+            }
+
+            // Bottom-right movement
+            for (let i = 1; i < 8; i++) {
+                if (desiredPosition.horizontalPosition -  initialPosition.horizontalPosition === i && desiredPosition.verticalPosition - initialPosition.verticalPosition === -i) {
+                    console.log(`Moving bottom right ${i} tile(s)`)
+                    break;
+                }
+            }
+
+            // Bottom-left movement
+            for (let i = 1; i < 8; i++) {
+                if (desiredPosition.horizontalPosition -  initialPosition.horizontalPosition === -i && desiredPosition.verticalPosition - initialPosition.verticalPosition === -i) {
+                    console.log(`Moving bottom left ${i} tile(s)`)
+                    break;
+                }
+            }
+
+            // Top-left movement
+            for (let i = 1; i < 8; i++) {
+                if (desiredPosition.horizontalPosition -  initialPosition.horizontalPosition === -i && desiredPosition.verticalPosition - initialPosition.verticalPosition === i) {
+                    console.log(`Moving top left ${i} tile(s)`)
+                    break;
+                }
+            }
         }
         return false;
     }
