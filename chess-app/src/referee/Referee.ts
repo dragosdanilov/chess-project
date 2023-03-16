@@ -1,9 +1,22 @@
-import { PieceType, TeamType, Piece, Position } from "../Constants";
+import { PieceType, TeamType, Piece, Position, samePosition } from "../Constants";
 
 export default class Referee {
-    tileIsOccupied(x: number, y: number, boardState: Piece[]): boolean {
+    tileIsEmptyOrOccupiedByOpponent(
+        position: Position, 
+        boardState: Piece[], 
+        team: TeamType
+    ) {
+        return (
+            !this.tileIsOccupied(position, boardState) || 
+            this.tileIsOccupiedByOpponent(position, boardState, team)
+        );
+    }
 
-        const piece = boardState.find(p => p.position.horizontalPosition === x && p.position.verticalPosition === y)
+    tileIsOccupied(position: Position, boardState: Piece[]): boolean {
+
+        const piece = boardState.find(
+            (p) => samePosition(p.position, position)
+            );
         if (piece) {
             return true;
         } else {
@@ -11,8 +24,9 @@ export default class Referee {
         }
     }
 
-    tileIsOccupiedByOpponent(x: number, y: number, boardState: Piece[], team: TeamType): boolean {
-        const piece = boardState.find((p) => p.position.horizontalPosition === x && p.position.verticalPosition === y && p.team !== team);
+    tileIsOccupiedByOpponent(position: Position, boardState: Piece[], team: TeamType): boolean {
+        const piece = boardState.find(
+            (p) => samePosition(p.position, position) && p.team !== team);
 
         if (piece) {
             return true;
@@ -58,12 +72,25 @@ export default class Referee {
             const pawnDirection = (team === TeamType.OUR) ? 1 : -1;
 
             // MOVEMENT LOGIC FOR THE PAWN
-            if (initialPosition.horizontalPosition === desiredPosition.horizontalPosition && initialPosition.verticalPosition === specialRow && desiredPosition.verticalPosition - initialPosition.verticalPosition === 2 * pawnDirection) {
-                if (!this.tileIsOccupied(desiredPosition.horizontalPosition, desiredPosition.verticalPosition, boardState) && !this.tileIsOccupied(desiredPosition.horizontalPosition, desiredPosition.verticalPosition - pawnDirection, boardState)) {
+            if (
+                initialPosition.horizontalPosition === desiredPosition.horizontalPosition && 
+                initialPosition.verticalPosition === specialRow && 
+                desiredPosition.verticalPosition - initialPosition.verticalPosition === 2 * pawnDirection
+            ) {
+                if (
+                    !this.tileIsOccupied(
+                        desiredPosition,
+                        boardState
+                    ) && 
+                    !this.tileIsOccupied(
+                        {horizontalPosition: desiredPosition.horizontalPosition, verticalPosition: desiredPosition.verticalPosition - pawnDirection},
+                        boardState
+                    )
+                ) {
                     return true;
                 }
             } else if (initialPosition.horizontalPosition === desiredPosition.horizontalPosition && desiredPosition.verticalPosition - initialPosition.verticalPosition === pawnDirection) {
-                if (!this.tileIsOccupied(desiredPosition.horizontalPosition, desiredPosition.verticalPosition, boardState)) {
+                if (!this.tileIsOccupied(desiredPosition, boardState)) {
                     return true;
                 }
             }
@@ -71,13 +98,13 @@ export default class Referee {
             else if (desiredPosition.horizontalPosition - initialPosition.horizontalPosition === -1 && desiredPosition.verticalPosition - initialPosition.verticalPosition === pawnDirection) {
                 // ATTACK IN UPPER OR BOTTOM LEFT CORNER
                 console.log("upper / bottom left");
-                if (this.tileIsOccupiedByOpponent(desiredPosition.horizontalPosition, desiredPosition.verticalPosition, boardState, team)) {
+                if (this.tileIsOccupiedByOpponent(desiredPosition, boardState, team)) {
                     return true;
                 }
             } else if (desiredPosition.horizontalPosition - initialPosition.horizontalPosition === 1 && desiredPosition.verticalPosition - initialPosition.verticalPosition === pawnDirection) {
                 // ATTACK IN UPPER OR BOTTOM RIGHT CORNER
                 console.log("upper / bottom right");
-                if (this.tileIsOccupiedByOpponent(desiredPosition.horizontalPosition, desiredPosition.verticalPosition, boardState, team)) {
+                if (this.tileIsOccupiedByOpponent(desiredPosition, boardState, team)) {
                     return true;
                 }
             }
@@ -90,13 +117,25 @@ export default class Referee {
                     // TOP & BOTTOM LINE MOVEMENT
                     if (desiredPosition.verticalPosition - initialPosition.verticalPosition === 2 * i) {
                         if (desiredPosition.horizontalPosition - initialPosition.horizontalPosition === j) {
-                        console.log('top/bottom left/right left');
+                            if (this.tileIsEmptyOrOccupiedByOpponent(
+                                desiredPosition, 
+                                boardState, 
+                                team)
+                            ) {
+                            return true;
+                            }
                         }
                     }
                     // RIGHT & LEFT LINE MOVEMENT
                     if (desiredPosition.horizontalPosition - initialPosition.horizontalPosition === 2 * i) {
                         if (desiredPosition.verticalPosition - initialPosition.verticalPosition === j) {
-                            console.log('right/left upper/lower');
+                            if (this.tileIsEmptyOrOccupiedByOpponent(
+                                desiredPosition, 
+                                boardState, 
+                                team)
+                            ) {
+                            return true;
+                            }
                         }
                     }
                 }
