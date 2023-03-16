@@ -145,32 +145,57 @@ export default class Referee {
 
             
             for (let i = 1; i < 8; i++) {
+                // Top-right movement
                 if (desiredPosition.horizontalPosition > initialPosition.horizontalPosition && desiredPosition.verticalPosition > initialPosition.verticalPosition) {
                     let passedPosition: Position = {horizontalPosition: initialPosition.horizontalPosition + i, verticalPosition: initialPosition.verticalPosition + i};
+                    if (this.tileIsOccupied(passedPosition, boardState)) {
+                        console.log('illegal move');
+                        break;
+                    }
                     console.log(`passed position: ${passedPosition.horizontalPosition}, ${passedPosition.verticalPosition}`);
                 }
-                // Top-right movement
+                
                 if (desiredPosition.horizontalPosition -  initialPosition.horizontalPosition === i && desiredPosition.verticalPosition - initialPosition.verticalPosition === i) {
-                    console.log(`Moving top right ${i} tile(s)`)
-                    break;
+                    return true;
                 }
 
                 // Bottom-right movement
+                if (desiredPosition.horizontalPosition > initialPosition.horizontalPosition && desiredPosition.verticalPosition < initialPosition.verticalPosition) {
+                    let passedPosition: Position = {horizontalPosition: initialPosition.horizontalPosition + i, verticalPosition: initialPosition.verticalPosition - i};
+                    if (this.tileIsOccupied(passedPosition, boardState)) {
+                        console.log(`illegal move`);
+                        break;
+                    }
+                }
+
                 if (desiredPosition.horizontalPosition -  initialPosition.horizontalPosition === i && desiredPosition.verticalPosition - initialPosition.verticalPosition === -i) {
-                    console.log(`Moving bottom right ${i} tile(s)`)
-                    break;
+                    return true;
                 }
 
                 // Bottom-left movement
+                if (desiredPosition.horizontalPosition < initialPosition.horizontalPosition && desiredPosition.verticalPosition < initialPosition.verticalPosition) {
+                    let passedPosition: Position = {horizontalPosition: initialPosition.horizontalPosition - i, verticalPosition: initialPosition.verticalPosition - i};
+                    if (this.tileIsOccupied(passedPosition, boardState)) {
+                        console.log('illegal move');
+                        break;
+                    }
+                }
+
                 if (desiredPosition.horizontalPosition -  initialPosition.horizontalPosition === -i && desiredPosition.verticalPosition - initialPosition.verticalPosition === -i) {
-                    console.log(`Moving bottom left ${i} tile(s)`)
-                    break;
+                    return true;
                 }
 
                 // Top-left movement
+                if (desiredPosition.horizontalPosition < initialPosition.horizontalPosition && desiredPosition.verticalPosition > initialPosition.verticalPosition) {
+                    let passedPosition: Position = {horizontalPosition: initialPosition.horizontalPosition - i, verticalPosition: initialPosition.verticalPosition + i};
+                    if (this.tileIsOccupied(passedPosition, boardState)) {
+                        console.log('illegal move');
+                        break;
+                    }
+                }
+
                 if (desiredPosition.horizontalPosition -  initialPosition.horizontalPosition === -i && desiredPosition.verticalPosition - initialPosition.verticalPosition === i) {
-                    console.log(`Moving top left ${i} tile(s)`)
-                    break;
+                    return true;
                 }
             }
         }
