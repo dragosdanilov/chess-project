@@ -148,54 +148,69 @@ export default class Referee {
                 // Top-right movement
                 if (desiredPosition.horizontalPosition > initialPosition.horizontalPosition && desiredPosition.verticalPosition > initialPosition.verticalPosition) {
                     let passedPosition: Position = {horizontalPosition: initialPosition.horizontalPosition + i, verticalPosition: initialPosition.verticalPosition + i};
-                    if (this.tileIsOccupied(passedPosition, boardState)) {
-                        console.log('illegal move');
-                        break;
+                    // Check if the tile is the destination tile
+                    if (passedPosition.horizontalPosition === desiredPosition.horizontalPosition && passedPosition.verticalPosition === desiredPosition.verticalPosition) {
+                        // Dealing with destination tile
+                        if (this.tileIsEmptyOrOccupiedByOpponent(passedPosition, boardState, team)) {
+                            return true;
+                        }
+                    } else {
+                        // Dealing with passing tile
+                        if (this.tileIsOccupied(passedPosition, boardState)) {
+                            break;
+                        }
                     }
-                    console.log(`passed position: ${passedPosition.horizontalPosition}, ${passedPosition.verticalPosition}`);
-                }
-                
-                if (desiredPosition.horizontalPosition -  initialPosition.horizontalPosition === i && desiredPosition.verticalPosition - initialPosition.verticalPosition === i) {
-                    return true;
                 }
 
                 // Bottom-right movement
                 if (desiredPosition.horizontalPosition > initialPosition.horizontalPosition && desiredPosition.verticalPosition < initialPosition.verticalPosition) {
                     let passedPosition: Position = {horizontalPosition: initialPosition.horizontalPosition + i, verticalPosition: initialPosition.verticalPosition - i};
-                    if (this.tileIsOccupied(passedPosition, boardState)) {
-                        console.log(`illegal move`);
-                        break;
+                    // Check if the tile is the destination tile
+                    if (passedPosition.horizontalPosition === desiredPosition.horizontalPosition && passedPosition.verticalPosition ===  desiredPosition.verticalPosition) {
+                        // Dealing with destination tile
+                        if (this.tileIsEmptyOrOccupiedByOpponent(passedPosition, boardState, team)) {
+                            return true;
+                        }
+                    } else {
+                        // Dealing with passing tile
+                        if (this.tileIsOccupied(passedPosition, boardState)) {
+                            break;
+                        }
                     }
-                }
-
-                if (desiredPosition.horizontalPosition -  initialPosition.horizontalPosition === i && desiredPosition.verticalPosition - initialPosition.verticalPosition === -i) {
-                    return true;
                 }
 
                 // Bottom-left movement
                 if (desiredPosition.horizontalPosition < initialPosition.horizontalPosition && desiredPosition.verticalPosition < initialPosition.verticalPosition) {
                     let passedPosition: Position = {horizontalPosition: initialPosition.horizontalPosition - i, verticalPosition: initialPosition.verticalPosition - i};
-                    if (this.tileIsOccupied(passedPosition, boardState)) {
-                        console.log('illegal move');
-                        break;
+                    // Check if the tile is the destination tile
+                    if (passedPosition.horizontalPosition === desiredPosition.horizontalPosition && passedPosition.verticalPosition === desiredPosition.verticalPosition) {
+                        // Dealing with destination tile
+                        if (this.tileIsEmptyOrOccupiedByOpponent(passedPosition, boardState, team)) {
+                            return true;
+                        }
+                    } else {
+                        // Dealing with passing tile
+                        if (this.tileIsOccupied(passedPosition, boardState)) {
+                            break;
+                        }
                     }
-                }
-
-                if (desiredPosition.horizontalPosition -  initialPosition.horizontalPosition === -i && desiredPosition.verticalPosition - initialPosition.verticalPosition === -i) {
-                    return true;
+                    
                 }
 
                 // Top-left movement
                 if (desiredPosition.horizontalPosition < initialPosition.horizontalPosition && desiredPosition.verticalPosition > initialPosition.verticalPosition) {
                     let passedPosition: Position = {horizontalPosition: initialPosition.horizontalPosition - i, verticalPosition: initialPosition.verticalPosition + i};
-                    if (this.tileIsOccupied(passedPosition, boardState)) {
-                        console.log('illegal move');
-                        break;
+                    // Check if the tile is the destination tile
+                    if (passedPosition.horizontalPosition === desiredPosition.horizontalPosition && passedPosition.verticalPosition === desiredPosition.verticalPosition) {
+                        // Dealing with destination tile
+                        if (this.tileIsEmptyOrOccupiedByOpponent(passedPosition, boardState, team)) {
+                            return true;
+                        }
+                    } else {
+                        if (this.tileIsOccupied(passedPosition, boardState)) {
+                            break;
+                        }
                     }
-                }
-
-                if (desiredPosition.horizontalPosition -  initialPosition.horizontalPosition === -i && desiredPosition.verticalPosition - initialPosition.verticalPosition === i) {
-                    return true;
                 }
             }
         }
