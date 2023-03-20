@@ -219,9 +219,8 @@ export default class Referee {
             for (let i = 1; i < 8; i++) {
                 if (desiredPosition.horizontalPosition === initialPosition.horizontalPosition) {
                 // VERTICAL ROOK MOVEMENT
-                    if (desiredPosition.verticalPosition > initialPosition.verticalPosition) {
-                        // UPWARD MOVEMENT
-                        let passedPosition: Position = {horizontalPosition: initialPosition.horizontalPosition, verticalPosition: initialPosition.verticalPosition + i};
+                        let multiplier = (desiredPosition.verticalPosition > initialPosition.verticalPosition) ? 1 : -1;
+                        let passedPosition: Position = {horizontalPosition: initialPosition.horizontalPosition, verticalPosition: initialPosition.verticalPosition + (i*multiplier)};
                         // Check if the tile is the destination tile
                         if (passedPosition.horizontalPosition === desiredPosition.horizontalPosition && passedPosition.verticalPosition === desiredPosition.verticalPosition) {
                             // Dealing with destination tile
@@ -233,30 +232,12 @@ export default class Referee {
                             if (this.tileIsOccupied(passedPosition, boardState)) {
                                 break;
                             }   
-                        }
-                    }
-                    if (desiredPosition.verticalPosition < initialPosition.verticalPosition) {
-                        // DOWNWARD MOVEMENT
-                        let passedPosition: Position = {horizontalPosition: initialPosition.horizontalPosition, verticalPosition: initialPosition.verticalPosition - i};
-                        // Check if the tile is the destination tile
-                        if (passedPosition.horizontalPosition === desiredPosition.horizontalPosition && passedPosition.verticalPosition === desiredPosition.verticalPosition) {
-                            // Dealing with destination tile
-                            if (this.tileIsEmptyOrOccupiedByOpponent(passedPosition, boardState, team)) {
-                                return true;
-                            }
-                        } else {
-                            // Dealing with passing tile
-                            if (this.tileIsOccupied(passedPosition, boardState)) {
-                                break;
-                            }   
-                        }
                     }
                 }
                 if (desiredPosition.verticalPosition === initialPosition.verticalPosition) {
                 // HORIZONTAL ROOK MOVEMENT
-                    if (desiredPosition.horizontalPosition > initialPosition.horizontalPosition) {
-                        // RIGHT MOVEMENT
-                        let passedPosition: Position = {horizontalPosition: initialPosition.horizontalPosition + i, verticalPosition: initialPosition.verticalPosition};
+                        let multiplier = (desiredPosition.horizontalPosition > initialPosition.horizontalPosition) ? 1 : -1;
+                        let passedPosition: Position = {horizontalPosition: initialPosition.horizontalPosition + (i*multiplier), verticalPosition: initialPosition.verticalPosition};
                         // Check if the tile is the destination tile
                         if (passedPosition.horizontalPosition === desiredPosition.horizontalPosition && passedPosition.verticalPosition === desiredPosition.verticalPosition) {
                             // Dealing with destination tile
@@ -269,23 +250,6 @@ export default class Referee {
                                 break;
                             }   
                         }
-                    }
-                    if (desiredPosition.horizontalPosition < initialPosition.horizontalPosition) {
-                        // LEFT MOVEMENT
-                        let passedPosition: Position = {horizontalPosition: initialPosition.horizontalPosition - i, verticalPosition: initialPosition.verticalPosition};
-                        // Check if the tile is the destination tile
-                        if (passedPosition.horizontalPosition === desiredPosition.horizontalPosition && passedPosition.verticalPosition === desiredPosition.verticalPosition) {
-                            // Dealing with destination tile
-                            if (this.tileIsEmptyOrOccupiedByOpponent(passedPosition, boardState, team)) {
-                                return true;
-                            }
-                        } else {
-                            // Dealing with passing tile
-                            if (this.tileIsOccupied(passedPosition, boardState)) {
-                                break;
-                            }   
-                        }
-                    }
                 }
             }
         }
