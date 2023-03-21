@@ -59,201 +59,229 @@ export default class Referee {
         return false;
     }
 
+    pawnMove(initialPosition: Position, desiredPosition: Position, team: TeamType, boardState: Piece[]): boolean {
+        const specialRow = (team === TeamType.OUR) ? 1 : 6;
+        const pawnDirection = (team === TeamType.OUR) ? 1 : -1;
 
-    isValidMove(initialPosition: Position, desiredPosition: Position, type: PieceType, team: TeamType, boardState: Piece[]) {
-        // console.log("Referee is checking the move...");
-        // console.log(`Previous location:(${px}, ${py})`)
-        // console.log(`Current location:(${x}, ${y})`)
-        // console.log(`Piece type: ${type}`)
-        // console.log(`Team: ${team}`)
-
-        if (type === PieceType.PAWN) {
-            const specialRow = (team === TeamType.OUR) ? 1 : 6;
-            const pawnDirection = (team === TeamType.OUR) ? 1 : -1;
-
-            // MOVEMENT LOGIC FOR THE PAWN
+        // MOVEMENT LOGIC FOR THE PAWN
+        if (
+            initialPosition.horizontalPosition === desiredPosition.horizontalPosition && 
+            initialPosition.verticalPosition === specialRow && 
+            desiredPosition.verticalPosition - initialPosition.verticalPosition === 2 * pawnDirection
+        ) {
             if (
-                initialPosition.horizontalPosition === desiredPosition.horizontalPosition && 
-                initialPosition.verticalPosition === specialRow && 
-                desiredPosition.verticalPosition - initialPosition.verticalPosition === 2 * pawnDirection
+                !this.tileIsOccupied(desiredPosition, boardState) && 
+                !this.tileIsOccupied(
+                    {horizontalPosition: desiredPosition.horizontalPosition, verticalPosition: desiredPosition.verticalPosition - pawnDirection},
+                    boardState
+                )
             ) {
-                if (
-                    !this.tileIsOccupied(
-                        desiredPosition,
-                        boardState
-                    ) && 
-                    !this.tileIsOccupied(
-                        {horizontalPosition: desiredPosition.horizontalPosition, verticalPosition: desiredPosition.verticalPosition - pawnDirection},
-                        boardState
-                    )
-                ) {
-                    return true;
-                }
-            } else if (initialPosition.horizontalPosition === desiredPosition.horizontalPosition && desiredPosition.verticalPosition - initialPosition.verticalPosition === pawnDirection) {
-                if (!this.tileIsOccupied(desiredPosition, boardState)) {
-                    return true;
-                }
+                return true;
             }
-            // ATTACKING LOGIC
-            else if (desiredPosition.horizontalPosition - initialPosition.horizontalPosition === -1 && desiredPosition.verticalPosition - initialPosition.verticalPosition === pawnDirection) {
-                // ATTACK IN UPPER OR BOTTOM LEFT CORNER
-                console.log("upper / bottom left");
-                if (this.tileIsOccupiedByOpponent(desiredPosition, boardState, team)) {
-                    return true;
-                }
-            } else if (desiredPosition.horizontalPosition - initialPosition.horizontalPosition === 1 && desiredPosition.verticalPosition - initialPosition.verticalPosition === pawnDirection) {
-                // ATTACK IN UPPER OR BOTTOM RIGHT CORNER
-                console.log("upper / bottom right");
-                if (this.tileIsOccupiedByOpponent(desiredPosition, boardState, team)) {
-                    return true;
-                }
+        } else if (
+            initialPosition.horizontalPosition === desiredPosition.horizontalPosition && 
+            desiredPosition.verticalPosition - initialPosition.verticalPosition === pawnDirection
+        ) {
+            if (!this.tileIsOccupied(desiredPosition, boardState)) {
+                return true;
             }
-        } else if (type === PieceType.KNIGHT) {
-            // MOVEMENT LOGIC FOR THE KNIGHT
-            // 8 different moving patterns
-
-            for (let i = -1; i < 2; i += 2) {
-                for (let j = -1; j < 2; j += 2) {
-                    // TOP & BOTTOM LINE MOVEMENT
-                    if (desiredPosition.verticalPosition - initialPosition.verticalPosition === 2 * i) {
-                        if (desiredPosition.horizontalPosition - initialPosition.horizontalPosition === j) {
-                            if (this.tileIsEmptyOrOccupiedByOpponent(
-                                desiredPosition, 
-                                boardState, 
-                                team)
-                            ) {
-                            return true;
-                            }
-                        }
-                    }
-                    // RIGHT & LEFT LINE MOVEMENT
-                    if (desiredPosition.horizontalPosition - initialPosition.horizontalPosition === 2 * i) {
-                        if (desiredPosition.verticalPosition - initialPosition.verticalPosition === j) {
-                            if (this.tileIsEmptyOrOccupiedByOpponent(
-                                desiredPosition, 
-                                boardState, 
-                                team)
-                            ) {
-                            return true;
-                            }
-                        }
-                    }
-                }
+        }
+        // ATTACKING LOGIC
+        else if (
+            desiredPosition.horizontalPosition - initialPosition.horizontalPosition === -1 && 
+            desiredPosition.verticalPosition - initialPosition.verticalPosition === pawnDirection
+        ) {
+            // ATTACK IN UPPER OR BOTTOM LEFT CORNER
+            if (this.tileIsOccupiedByOpponent(desiredPosition, boardState, team)) {
+                return true;
             }
-        } else if (type === PieceType.BISHOP) {
-            // MOVEMENT LOGIC FOR THE BISHOP
-
-            
-            for (let i = 1; i < 8; i++) {
-                // Top-right movement
-                if (desiredPosition.horizontalPosition > initialPosition.horizontalPosition && desiredPosition.verticalPosition > initialPosition.verticalPosition) {
-                    let passedPosition: Position = {horizontalPosition: initialPosition.horizontalPosition + i, verticalPosition: initialPosition.verticalPosition + i};
-                    // Check if the tile is the destination tile
-                    if (passedPosition.horizontalPosition === desiredPosition.horizontalPosition && passedPosition.verticalPosition === desiredPosition.verticalPosition) {
-                        // Dealing with destination tile
-                        if (this.tileIsEmptyOrOccupiedByOpponent(passedPosition, boardState, team)) {
-                            return true;
-                        }
-                    } else {
-                        // Dealing with passing tile
-                        if (this.tileIsOccupied(passedPosition, boardState)) {
-                            break;
-                        }
-                    }
-                }
-
-                // Bottom-right movement
-                if (desiredPosition.horizontalPosition > initialPosition.horizontalPosition && desiredPosition.verticalPosition < initialPosition.verticalPosition) {
-                    let passedPosition: Position = {horizontalPosition: initialPosition.horizontalPosition + i, verticalPosition: initialPosition.verticalPosition - i};
-                    // Check if the tile is the destination tile
-                    if (passedPosition.horizontalPosition === desiredPosition.horizontalPosition && passedPosition.verticalPosition ===  desiredPosition.verticalPosition) {
-                        // Dealing with destination tile
-                        if (this.tileIsEmptyOrOccupiedByOpponent(passedPosition, boardState, team)) {
-                            return true;
-                        }
-                    } else {
-                        // Dealing with passing tile
-                        if (this.tileIsOccupied(passedPosition, boardState)) {
-                            break;
-                        }
-                    }
-                }
-
-                // Bottom-left movement
-                if (desiredPosition.horizontalPosition < initialPosition.horizontalPosition && desiredPosition.verticalPosition < initialPosition.verticalPosition) {
-                    let passedPosition: Position = {horizontalPosition: initialPosition.horizontalPosition - i, verticalPosition: initialPosition.verticalPosition - i};
-                    // Check if the tile is the destination tile
-                    if (passedPosition.horizontalPosition === desiredPosition.horizontalPosition && passedPosition.verticalPosition === desiredPosition.verticalPosition) {
-                        // Dealing with destination tile
-                        if (this.tileIsEmptyOrOccupiedByOpponent(passedPosition, boardState, team)) {
-                            return true;
-                        }
-                    } else {
-                        // Dealing with passing tile
-                        if (this.tileIsOccupied(passedPosition, boardState)) {
-                            break;
-                        }
-                    }
-                    
-                }
-
-                // Top-left movement
-                if (desiredPosition.horizontalPosition < initialPosition.horizontalPosition && desiredPosition.verticalPosition > initialPosition.verticalPosition) {
-                    let passedPosition: Position = {horizontalPosition: initialPosition.horizontalPosition - i, verticalPosition: initialPosition.verticalPosition + i};
-                    // Check if the tile is the destination tile
-                    if (passedPosition.horizontalPosition === desiredPosition.horizontalPosition && passedPosition.verticalPosition === desiredPosition.verticalPosition) {
-                        // Dealing with destination tile
-                        if (this.tileIsEmptyOrOccupiedByOpponent(passedPosition, boardState, team)) {
-                            return true;
-                        }
-                    } else {
-                        // Dealing with passing tile
-                        if (this.tileIsOccupied(passedPosition, boardState)) {
-                            break;
-                        }
-                    }
-                }
+        } else if (
+            desiredPosition.horizontalPosition - initialPosition.horizontalPosition === 1 && 
+            desiredPosition.verticalPosition - initialPosition.verticalPosition === pawnDirection
+        ) {
+            // ATTACK IN UPPER OR BOTTOM RIGHT CORNER
+            if (this.tileIsOccupiedByOpponent(desiredPosition, boardState, team)) {
+                return true;
             }
-        } else if (type === PieceType.ROOK) {
-            // MOVEMENT LOGIC FOR THE ROOK
-            for (let i = 1; i < 8; i++) {
-                if (desiredPosition.horizontalPosition === initialPosition.horizontalPosition) {
-                // VERTICAL ROOK MOVEMENT
-                        let multiplier = (desiredPosition.verticalPosition > initialPosition.verticalPosition) ? 1 : -1;
-                        let passedPosition: Position = {horizontalPosition: initialPosition.horizontalPosition, verticalPosition: initialPosition.verticalPosition + (i*multiplier)};
-                        // Check if the tile is the destination tile
-                        if (passedPosition.horizontalPosition === desiredPosition.horizontalPosition && passedPosition.verticalPosition === desiredPosition.verticalPosition) {
-                            // Dealing with destination tile
-                            if (this.tileIsEmptyOrOccupiedByOpponent(passedPosition, boardState, team)) {
-                                return true;
-                            }
-                        } else {
-                            // Dealing with passing tile
-                            if (this.tileIsOccupied(passedPosition, boardState)) {
-                                break;
-                            }   
+        }
+        return false;
+    }
+
+    knightMove(initialPosition: Position, desiredPosition: Position, team: TeamType, boardState: Piece[]): boolean {
+        // MOVEMENT LOGIC FOR THE KNIGHT
+        // 8 different moving patterns
+
+        for (let i = -1; i < 2; i += 2) {
+            for (let j = -1; j < 2; j += 2) {
+                // TOP & BOTTOM LINE MOVEMENT
+                if (desiredPosition.verticalPosition - initialPosition.verticalPosition === 2 * i) {
+                    if (desiredPosition.horizontalPosition - initialPosition.horizontalPosition === j) {
+                        if (this.tileIsEmptyOrOccupiedByOpponent(
+                            desiredPosition, 
+                            boardState, 
+                            team)
+                        ) {
+                        return true;
+                        }
                     }
                 }
-                if (desiredPosition.verticalPosition === initialPosition.verticalPosition) {
-                // HORIZONTAL ROOK MOVEMENT
-                        let multiplier = (desiredPosition.horizontalPosition > initialPosition.horizontalPosition) ? 1 : -1;
-                        let passedPosition: Position = {horizontalPosition: initialPosition.horizontalPosition + (i*multiplier), verticalPosition: initialPosition.verticalPosition};
-                        // Check if the tile is the destination tile
-                        if (passedPosition.horizontalPosition === desiredPosition.horizontalPosition && passedPosition.verticalPosition === desiredPosition.verticalPosition) {
-                            // Dealing with destination tile
-                            if (this.tileIsEmptyOrOccupiedByOpponent(passedPosition, boardState, team)) {
-                                return true;
-                            }
-                        } else {
-                            // Dealing with passing tile
-                            if (this.tileIsOccupied(passedPosition, boardState)) {
-                                break;
-                            }   
+                // RIGHT & LEFT LINE MOVEMENT
+                if (desiredPosition.horizontalPosition - initialPosition.horizontalPosition === 2 * i) {
+                    if (desiredPosition.verticalPosition - initialPosition.verticalPosition === j) {
+                        if (this.tileIsEmptyOrOccupiedByOpponent(
+                            desiredPosition, 
+                            boardState, 
+                            team)
+                        ) {
+                        return true;
                         }
+                    }
                 }
             }
         }
-
         return false;
+    }
+
+    bishopMove(initialPosition: Position, desiredPosition: Position, team: TeamType, boardState: Piece[]): boolean {
+        // MOVEMENT LOGIC FOR THE BISHOP
+            
+        for (let i = 1; i < 8; i++) {
+            // Top-right movement
+            if (desiredPosition.horizontalPosition > initialPosition.horizontalPosition && desiredPosition.verticalPosition > initialPosition.verticalPosition) {
+                let passedPosition: Position = {horizontalPosition: initialPosition.horizontalPosition + i, verticalPosition: initialPosition.verticalPosition + i};
+                // Check if the tile is the destination tile
+                if (passedPosition.horizontalPosition === desiredPosition.horizontalPosition && passedPosition.verticalPosition === desiredPosition.verticalPosition) {
+                    // Dealing with destination tile
+                    if (this.tileIsEmptyOrOccupiedByOpponent(passedPosition, boardState, team)) {
+                        return true;
+                    }
+                } else {
+                    // Dealing with passing tile
+                    if (this.tileIsOccupied(passedPosition, boardState)) {
+                        break;
+                    }
+                }
+            }
+
+            // Bottom-right movement
+            if (desiredPosition.horizontalPosition > initialPosition.horizontalPosition && desiredPosition.verticalPosition < initialPosition.verticalPosition) {
+                let passedPosition: Position = {horizontalPosition: initialPosition.horizontalPosition + i, verticalPosition: initialPosition.verticalPosition - i};
+                // Check if the tile is the destination tile
+                if (passedPosition.horizontalPosition === desiredPosition.horizontalPosition && passedPosition.verticalPosition ===  desiredPosition.verticalPosition) {
+                    // Dealing with destination tile
+                    if (this.tileIsEmptyOrOccupiedByOpponent(passedPosition, boardState, team)) {
+                        return true;
+                    }
+                } else {
+                    // Dealing with passing tile
+                    if (this.tileIsOccupied(passedPosition, boardState)) {
+                        break;
+                    }
+                }
+            }
+
+            // Bottom-left movement
+            if (desiredPosition.horizontalPosition < initialPosition.horizontalPosition && desiredPosition.verticalPosition < initialPosition.verticalPosition) {
+                let passedPosition: Position = {horizontalPosition: initialPosition.horizontalPosition - i, verticalPosition: initialPosition.verticalPosition - i};
+                // Check if the tile is the destination tile
+                if (passedPosition.horizontalPosition === desiredPosition.horizontalPosition && passedPosition.verticalPosition === desiredPosition.verticalPosition) {
+                    // Dealing with destination tile
+                    if (this.tileIsEmptyOrOccupiedByOpponent(passedPosition, boardState, team)) {
+                        return true;
+                    }
+                } else {
+                    // Dealing with passing tile
+                    if (this.tileIsOccupied(passedPosition, boardState)) {
+                        break;
+                    }
+                }
+                
+            }
+
+            // Top-left movement
+            if (desiredPosition.horizontalPosition < initialPosition.horizontalPosition && desiredPosition.verticalPosition > initialPosition.verticalPosition) {
+                let passedPosition: Position = {horizontalPosition: initialPosition.horizontalPosition - i, verticalPosition: initialPosition.verticalPosition + i};
+                // Check if the tile is the destination tile
+                if (passedPosition.horizontalPosition === desiredPosition.horizontalPosition && passedPosition.verticalPosition === desiredPosition.verticalPosition) {
+                    // Dealing with destination tile
+                    if (this.tileIsEmptyOrOccupiedByOpponent(passedPosition, boardState, team)) {
+                        return true;
+                    }
+                } else {
+                    // Dealing with passing tile
+                    if (this.tileIsOccupied(passedPosition, boardState)) {
+                        break;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    rookMove(initialPosition: Position, desiredPosition: Position, team: TeamType, boardState: Piece[]): boolean {
+        // MOVEMENT LOGIC FOR THE ROOK
+        for (let i = 1; i < 8; i++) {
+            if (desiredPosition.horizontalPosition === initialPosition.horizontalPosition) {
+            // VERTICAL ROOK MOVEMENT
+                    let multiplier = (desiredPosition.verticalPosition > initialPosition.verticalPosition) ? 1 : -1;
+                    let passedPosition: Position = {horizontalPosition: initialPosition.horizontalPosition, verticalPosition: initialPosition.verticalPosition + (i*multiplier)};
+                    // Check if the tile is the destination tile
+                    if (passedPosition.horizontalPosition === desiredPosition.horizontalPosition && passedPosition.verticalPosition === desiredPosition.verticalPosition) {
+                        // Dealing with destination tile
+                        if (this.tileIsEmptyOrOccupiedByOpponent(passedPosition, boardState, team)) {
+                            return true;
+                        }
+                    } else {
+                        // Dealing with passing tile
+                        if (this.tileIsOccupied(passedPosition, boardState)) {
+                            break;
+                        }   
+                }
+            }
+            if (desiredPosition.verticalPosition === initialPosition.verticalPosition) {
+            // HORIZONTAL ROOK MOVEMENT
+                    let multiplier = (desiredPosition.horizontalPosition > initialPosition.horizontalPosition) ? 1 : -1;
+                    let passedPosition: Position = {horizontalPosition: initialPosition.horizontalPosition + (i*multiplier), verticalPosition: initialPosition.verticalPosition};
+                    // Check if the tile is the destination tile
+                    if (passedPosition.horizontalPosition === desiredPosition.horizontalPosition && passedPosition.verticalPosition === desiredPosition.verticalPosition) {
+                        // Dealing with destination tile
+                        if (this.tileIsEmptyOrOccupiedByOpponent(passedPosition, boardState, team)) {
+                            return true;
+                        }
+                    } else {
+                        // Dealing with passing tile
+                        if (this.tileIsOccupied(passedPosition, boardState)) {
+                            break;
+                        }   
+                    }
+            }
+        }
+        return false;
+    }
+
+
+
+    isValidMove(
+        initialPosition: Position, 
+        desiredPosition: Position, 
+        type: PieceType, 
+        team: TeamType, 
+        boardState: Piece[]
+    ) {
+        let validMove = false;
+        switch(type) {
+            case PieceType.PAWN:
+                validMove = this.pawnMove(initialPosition, desiredPosition, team, boardState);
+                break;
+            case PieceType.KNIGHT:
+                validMove = this.knightMove(initialPosition, desiredPosition, team, boardState);
+                break;
+            case PieceType.BISHOP:
+                validMove = this.bishopMove(initialPosition, desiredPosition, team, boardState);
+                break;
+            case PieceType.ROOK:
+                validMove = this.rookMove(initialPosition, desiredPosition, team, boardState);
+        }
+        return validMove;   
     }
 }
