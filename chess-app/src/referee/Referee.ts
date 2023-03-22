@@ -150,7 +150,7 @@ export default class Referee {
             if (desiredPosition.horizontalPosition > initialPosition.horizontalPosition && desiredPosition.verticalPosition > initialPosition.verticalPosition) {
                 let passedPosition: Position = {horizontalPosition: initialPosition.horizontalPosition + i, verticalPosition: initialPosition.verticalPosition + i};
                 // Check if the tile is the destination tile
-                if (passedPosition.horizontalPosition === desiredPosition.horizontalPosition && passedPosition.verticalPosition === desiredPosition.verticalPosition) {
+                if (samePosition(passedPosition, desiredPosition)) {
                     // Dealing with destination tile
                     if (this.tileIsEmptyOrOccupiedByOpponent(passedPosition, boardState, team)) {
                         return true;
@@ -167,7 +167,7 @@ export default class Referee {
             if (desiredPosition.horizontalPosition > initialPosition.horizontalPosition && desiredPosition.verticalPosition < initialPosition.verticalPosition) {
                 let passedPosition: Position = {horizontalPosition: initialPosition.horizontalPosition + i, verticalPosition: initialPosition.verticalPosition - i};
                 // Check if the tile is the destination tile
-                if (passedPosition.horizontalPosition === desiredPosition.horizontalPosition && passedPosition.verticalPosition ===  desiredPosition.verticalPosition) {
+                if (samePosition(passedPosition, desiredPosition)) {
                     // Dealing with destination tile
                     if (this.tileIsEmptyOrOccupiedByOpponent(passedPosition, boardState, team)) {
                         return true;
@@ -184,7 +184,7 @@ export default class Referee {
             if (desiredPosition.horizontalPosition < initialPosition.horizontalPosition && desiredPosition.verticalPosition < initialPosition.verticalPosition) {
                 let passedPosition: Position = {horizontalPosition: initialPosition.horizontalPosition - i, verticalPosition: initialPosition.verticalPosition - i};
                 // Check if the tile is the destination tile
-                if (passedPosition.horizontalPosition === desiredPosition.horizontalPosition && passedPosition.verticalPosition === desiredPosition.verticalPosition) {
+                if (samePosition(passedPosition, desiredPosition)) {
                     // Dealing with destination tile
                     if (this.tileIsEmptyOrOccupiedByOpponent(passedPosition, boardState, team)) {
                         return true;
@@ -202,7 +202,7 @@ export default class Referee {
             if (desiredPosition.horizontalPosition < initialPosition.horizontalPosition && desiredPosition.verticalPosition > initialPosition.verticalPosition) {
                 let passedPosition: Position = {horizontalPosition: initialPosition.horizontalPosition - i, verticalPosition: initialPosition.verticalPosition + i};
                 // Check if the tile is the destination tile
-                if (passedPosition.horizontalPosition === desiredPosition.horizontalPosition && passedPosition.verticalPosition === desiredPosition.verticalPosition) {
+                if (samePosition(passedPosition, desiredPosition)) {
                     // Dealing with destination tile
                     if (this.tileIsEmptyOrOccupiedByOpponent(passedPosition, boardState, team)) {
                         return true;
@@ -226,7 +226,7 @@ export default class Referee {
                     let multiplier = (desiredPosition.verticalPosition > initialPosition.verticalPosition) ? 1 : -1;
                     let passedPosition: Position = {horizontalPosition: initialPosition.horizontalPosition, verticalPosition: initialPosition.verticalPosition + (i*multiplier)};
                     // Check if the tile is the destination tile
-                    if (passedPosition.horizontalPosition === desiredPosition.horizontalPosition && passedPosition.verticalPosition === desiredPosition.verticalPosition) {
+                    if (samePosition(passedPosition, desiredPosition)) {
                         // Dealing with destination tile
                         if (this.tileIsEmptyOrOccupiedByOpponent(passedPosition, boardState, team)) {
                             return true;
@@ -243,7 +243,7 @@ export default class Referee {
                     let multiplier = (desiredPosition.horizontalPosition > initialPosition.horizontalPosition) ? 1 : -1;
                     let passedPosition: Position = {horizontalPosition: initialPosition.horizontalPosition + (i*multiplier), verticalPosition: initialPosition.verticalPosition};
                     // Check if the tile is the destination tile
-                    if (passedPosition.horizontalPosition === desiredPosition.horizontalPosition && passedPosition.verticalPosition === desiredPosition.verticalPosition) {
+                    if (samePosition(passedPosition, desiredPosition)) {
                         // Dealing with destination tile
                         if (this.tileIsEmptyOrOccupiedByOpponent(passedPosition, boardState, team)) {
                             return true;
@@ -267,7 +267,7 @@ export default class Referee {
                 let multiplier = (desiredPosition.verticalPosition > initialPosition.verticalPosition) ? 1 : -1;
                 let passedPosition: Position = {horizontalPosition: initialPosition.horizontalPosition, verticalPosition: initialPosition.verticalPosition + (i*multiplier)};
                 // Check if the tile is the destination tile
-                if (passedPosition.horizontalPosition === desiredPosition.horizontalPosition && passedPosition.verticalPosition === desiredPosition.verticalPosition) {
+                if (samePosition(passedPosition, desiredPosition)) {
                     // Dealing with destination tile
                     if (this.tileIsEmptyOrOccupiedByOpponent(passedPosition, boardState, team)) {
                         return true;
@@ -284,7 +284,7 @@ export default class Referee {
                 let multiplier = (desiredPosition.horizontalPosition > initialPosition.horizontalPosition) ? 1 : -1;
                 let passedPosition: Position = {horizontalPosition: initialPosition.horizontalPosition + (i*multiplier), verticalPosition: initialPosition.verticalPosition};
                 // Check if the tile is the destination tile
-                if (passedPosition.horizontalPosition === desiredPosition.horizontalPosition && passedPosition.verticalPosition === desiredPosition.verticalPosition) {
+                if (samePosition(passedPosition, desiredPosition)) {
                     // Dealing with destination tile
                     if (this.tileIsEmptyOrOccupiedByOpponent(passedPosition, boardState, team)) {
                         return true;
@@ -308,7 +308,7 @@ export default class Referee {
                 let multiplier = (desiredPosition.horizontalPosition > initialPosition.horizontalPosition) ? 1 : -1;
                 let passedPosition: Position = {horizontalPosition: initialPosition.horizontalPosition + (i*multiplier), verticalPosition: initialPosition.verticalPosition + (i*multiplier)};
                 // Check if the tile is the destination tile
-                if (passedPosition.horizontalPosition === desiredPosition.horizontalPosition && passedPosition.verticalPosition === desiredPosition.verticalPosition) {
+                if (samePosition(passedPosition, desiredPosition)) {
                     // Dealing with destination tile
                     if (this.tileIsEmptyOrOccupiedByOpponent(passedPosition, boardState, team)) {
                         return true;
@@ -332,7 +332,7 @@ export default class Referee {
                 let multiplier = (desiredPosition.horizontalPosition > initialPosition.horizontalPosition) ? 1 : -1;
                 let passedPosition: Position = {horizontalPosition: initialPosition.horizontalPosition + (i*multiplier), verticalPosition: initialPosition.verticalPosition - (i*multiplier)};
                 // Check if the tile is the destination tile
-                if (passedPosition.horizontalPosition === desiredPosition.horizontalPosition && passedPosition.verticalPosition ===  desiredPosition.verticalPosition) {
+                if (samePosition(passedPosition, desiredPosition)) {
                     // Dealing with destination tile
                     if (this.tileIsEmptyOrOccupiedByOpponent(passedPosition, boardState, team)) {
                         return true;
