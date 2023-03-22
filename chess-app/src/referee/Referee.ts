@@ -262,44 +262,26 @@ export default class Referee {
     queenMove(initialPosition: Position, desiredPosition: Position, team: TeamType, boardState: Piece[]): boolean {
         // MOVEMENT LOGIC FOR THE QUEEN
         for (let i = 1; i < 8; i++) {
-            if (desiredPosition.horizontalPosition === initialPosition.horizontalPosition) {
-                // VERTICAL QUEEN MOVEMENT
-                let multiplier = (desiredPosition.verticalPosition > initialPosition.verticalPosition) ? 1 : -1;
-                let passedPosition: Position = {horizontalPosition: initialPosition.horizontalPosition, verticalPosition: initialPosition.verticalPosition + (i*multiplier)};
-                // Check if the tile is the destination tile
-                if (samePosition(passedPosition, desiredPosition)) {
-                    // Dealing with destination tile
-                    if (this.tileIsEmptyOrOccupiedByOpponent(passedPosition, boardState, team)) {
-                        return true;
-                    }
-                } else {
-                    // Dealing with passing tile
-                    if (this.tileIsOccupied(passedPosition, boardState)) {
-                        break;
-                    }   
-                }
-            }
-            if (desiredPosition.verticalPosition === initialPosition.verticalPosition) {
-                // HORIZONTAL QUEEN MOVEMENT
-                let multiplier = (desiredPosition.horizontalPosition > initialPosition.horizontalPosition) ? 1 : -1;
-                let passedPosition: Position = {horizontalPosition: initialPosition.horizontalPosition + (i*multiplier), verticalPosition: initialPosition.verticalPosition};
-                // Check if the tile is the destination tile
-                if (samePosition(passedPosition, desiredPosition)) {
-                    // Dealing with destination tile
-                    if (this.tileIsEmptyOrOccupiedByOpponent(passedPosition, boardState, team)) {
-                        return true;
-                    }
-                } else {
-                    // Dealing with passing tile
-                    if (this.tileIsOccupied(passedPosition, boardState)) {
-                        break;
-                    }   
-                }
-            }
 
-            // DIAGONAL QUEEN MOVEMENT
-            let multiplierX = (desiredPosition.horizontalPosition < initialPosition.horizontalPosition) ? -1 : 1;
-            let multiplierY = (desiredPosition.verticalPosition < initialPosition.verticalPosition) ? -1 : 1;
+            let multiplierX;
+            if (desiredPosition.horizontalPosition < initialPosition.horizontalPosition) {
+                multiplierX = -1;
+            } else if (desiredPosition.horizontalPosition > initialPosition.horizontalPosition) {
+                multiplierX = 1;
+            } else {
+                // horizontalPosition remains unchanged
+                multiplierX = 0;
+            }
+            
+            let multiplierY;
+            if (desiredPosition.verticalPosition < initialPosition.verticalPosition) {
+                multiplierY = -1;
+            } else if (desiredPosition.verticalPosition > initialPosition.verticalPosition) {
+                multiplierY = 1;
+            } else {
+                // verticalPosition remains unchanged
+                multiplierY = 0;
+            }
 
             let passedPosition: Position = {horizontalPosition: initialPosition.horizontalPosition + (i*multiplierX), verticalPosition: initialPosition.verticalPosition + (i*multiplierY)};
             // Check if the tile is the destination tile
