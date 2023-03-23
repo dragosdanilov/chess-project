@@ -263,25 +263,9 @@ export default class Referee {
         // MOVEMENT LOGIC FOR THE QUEEN
         for (let i = 1; i < 8; i++) {
 
-            let multiplierX;
-            if (desiredPosition.horizontalPosition < initialPosition.horizontalPosition) {
-                multiplierX = -1;
-            } else if (desiredPosition.horizontalPosition > initialPosition.horizontalPosition) {
-                multiplierX = 1;
-            } else {
-                // horizontalPosition remains unchanged
-                multiplierX = 0;
-            }
+            let multiplierX = (desiredPosition.horizontalPosition < initialPosition.horizontalPosition) ? -1 : (desiredPosition.horizontalPosition > initialPosition.horizontalPosition) ? 1 : 0;
 
-            let multiplierY;
-            if (desiredPosition.verticalPosition < initialPosition.verticalPosition) {
-                multiplierY = -1;
-            } else if (desiredPosition.verticalPosition > initialPosition.verticalPosition) {
-                multiplierY = 1;
-            } else {
-                // verticalPosition remains unchanged
-                multiplierY = 0;
-            }
+            let multiplierY = (desiredPosition.verticalPosition < initialPosition.verticalPosition) ? -1 : (desiredPosition.verticalPosition > initialPosition.verticalPosition) ? 1 : 0;
 
             let passedPosition: Position = {horizontalPosition: initialPosition.horizontalPosition + (i*multiplierX), verticalPosition: initialPosition.verticalPosition + (i*multiplierY)};
             // Check if the tile is the destination tile
@@ -303,25 +287,9 @@ export default class Referee {
     kingMove(initialPosition: Position, desiredPosition: Position, team: TeamType, boardState: Piece[]): boolean {
         for (let i = 1; i < 2; i++) {
 
-            let multiplierX;
-            if (desiredPosition.horizontalPosition < initialPosition.horizontalPosition) {
-                multiplierX = -1;
-            } else if (desiredPosition.horizontalPosition > initialPosition.horizontalPosition) {
-                multiplierX = 1;
-            } else {
-                // horizontalPosition remains unchanged
-                multiplierX = 0;
-            }
+            let multiplierX = (desiredPosition.horizontalPosition < initialPosition.horizontalPosition) ? -1 : (desiredPosition.horizontalPosition > initialPosition.horizontalPosition) ? 1 : 0;
 
-            let multiplierY;
-            if (desiredPosition.verticalPosition < initialPosition.verticalPosition) {
-                multiplierY = -1;
-            } else if (desiredPosition.verticalPosition > initialPosition.verticalPosition) {
-                multiplierY = 1;
-            } else {
-                // verticalPosition remains unchanged
-                multiplierY = 0;
-            }
+            let multiplierY = (desiredPosition.verticalPosition < initialPosition.verticalPosition) ? -1 : (desiredPosition.verticalPosition > initialPosition.verticalPosition) ? 1 : 0;
 
             let passedPosition: Position = {horizontalPosition: initialPosition.horizontalPosition + (i*multiplierX), verticalPosition: initialPosition.verticalPosition + (i*multiplierY)};
             // Check if the tile is the destination tile
