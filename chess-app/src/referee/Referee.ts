@@ -272,7 +272,47 @@ export default class Referee {
                 // horizontalPosition remains unchanged
                 multiplierX = 0;
             }
-            
+
+            let multiplierY;
+            if (desiredPosition.verticalPosition < initialPosition.verticalPosition) {
+                multiplierY = -1;
+            } else if (desiredPosition.verticalPosition > initialPosition.verticalPosition) {
+                multiplierY = 1;
+            } else {
+                // verticalPosition remains unchanged
+                multiplierY = 0;
+            }
+
+            let passedPosition: Position = {horizontalPosition: initialPosition.horizontalPosition + (i*multiplierX), verticalPosition: initialPosition.verticalPosition + (i*multiplierY)};
+            // Check if the tile is the destination tile
+            if (samePosition(passedPosition, desiredPosition)) {
+                // Dealing with destination tile
+                if (this.tileIsEmptyOrOccupiedByOpponent(passedPosition, boardState, team)) {
+                    return true;
+                }
+            } else {
+                // Dealing with passing tile
+                if (this.tileIsOccupied(passedPosition, boardState)) {
+                    break;
+                }
+            }
+        }
+        return false;
+    }
+
+    kingMove(initialPosition: Position, desiredPosition: Position, team: TeamType, boardState: Piece[]): boolean {
+        for (let i = 1; i < 2; i++) {
+
+            let multiplierX;
+            if (desiredPosition.horizontalPosition < initialPosition.horizontalPosition) {
+                multiplierX = -1;
+            } else if (desiredPosition.horizontalPosition > initialPosition.horizontalPosition) {
+                multiplierX = 1;
+            } else {
+                // horizontalPosition remains unchanged
+                multiplierX = 0;
+            }
+
             let multiplierY;
             if (desiredPosition.verticalPosition < initialPosition.verticalPosition) {
                 multiplierY = -1;
@@ -323,6 +363,9 @@ export default class Referee {
                 break;
             case PieceType.QUEEN:
                 validMove = this.queenMove(initialPosition, desiredPosition, team, boardState);
+                break;
+            case PieceType.KING:
+                validMove = this.kingMove(initialPosition, desiredPosition, team, boardState);
         }
         return validMove;   
     }
