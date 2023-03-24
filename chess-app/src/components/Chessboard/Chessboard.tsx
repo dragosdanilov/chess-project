@@ -121,6 +121,12 @@ export default function Chessboard() {
                                 
                             piece.position.horizontalPosition = x;
                             piece.position.verticalPosition = y;
+
+                            let promotionRow = (piece.team === TeamType.OUR) ? 7 : 0;
+
+                            if (y === promotionRow) {
+                                console.log('This piece is up for promotion')
+                            }
                             results.push(piece);
                         } else if (!(samePosition(piece.position, {horizontalPosition: x, verticalPosition: y}))) {
                             if (piece.type === PieceType.PAWN) {
@@ -160,13 +166,22 @@ export default function Chessboard() {
         }
     }
     return (
-        <div 
-        onMouseMove={(e) => movePiece(e)} 
-        onMouseDown={(e) => grabPiece(e)} 
-        onMouseUp={(e) => dropPiece(e)}
-        id="chessboard"
-        ref={chessboardRef}
-        >
-            {board}
-        </div>);
+        <>
+            <div id="pawn-promotion-modal">
+                <img src="/assets/images/rook_w.png"/>
+                <img src="/assets/images/knight_w.png"/>
+                <img src="/assets/images/bishop_w.png"/>
+                <img src="/assets/images/queen_w.png"/>
+            </div>
+            <div 
+                onMouseMove={(e) => movePiece(e)} 
+                onMouseDown={(e) => grabPiece(e)} 
+                onMouseUp={(e) => dropPiece(e)}
+                id="chessboard"
+                ref={chessboardRef}
+            >
+                {board}
+            </div>
+        </>
+    );
 }
