@@ -15,6 +15,10 @@
     left: 0px;
 }
 
+#pawn-promotion-modal.hidden {
+    display: none;
+}
+
 #pawn-promotion-modal > .modal-body {
     position: absolute;
     top: calc(50% - 150px);

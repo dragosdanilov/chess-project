@@ -10,6 +10,7 @@ export default function Chessboard() {
     const [grabPosition, setGrabPosition] = useState<Position>({horizontalPosition: -1, verticalPosition: -1})
     const [pieces, setPieces] = useState<Piece[]>(initialBoardState);
     const chessboardRef = useRef<HTMLDivElement>(null);
+    const modalRef = useRef<HTMLDivElement>(null);
     const referee = new Referee();
 
     function grabPiece(e: React.MouseEvent) {
@@ -126,6 +127,7 @@ export default function Chessboard() {
                             let promotionRow = (piece.team === TeamType.OUR) ? 7 : 0;
 
                             if (y === promotionRow) {
+                                modalRef.current?.classList.remove("hidden");
                                 setPromotionPawn(piece);
                             }
                             results.push(piece);
@@ -172,7 +174,7 @@ export default function Chessboard() {
     }
     return (
         <>
-            <div id="pawn-promotion-modal">
+            <div id="pawn-promotion-modal" className="hidden" ref={modalRef}>
                 <div className="modal-body">
                     <img onClick={() => promotePawn(PieceType.ROOK)} src="/assets/images/rook_w.png"/>
                     <img onClick={() => promotePawn(PieceType.KNIGHT)} src="/assets/images/knight_w.png"/>
