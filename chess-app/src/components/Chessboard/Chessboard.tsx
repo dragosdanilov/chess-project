@@ -155,8 +155,42 @@ export default function Chessboard() {
     } 
 
     function promotePawn(pieceType: PieceType) {
-        console.log(`Promoting pawn into ${pieceType}`);
-        console.log(promotionPawn);
+        if (promotionPawn === undefined) {
+            return;
+        }
+        const updatedPieces = pieces.reduce((results, piece) => {
+            if (samePosition(piece.position, promotionPawn.position)) {
+                piece.type = pieceType;
+                const teamType = (piece.team === TeamType.OUR) ? "w" : "b"
+                let image = "";
+                switch(pieceType) {
+                    case PieceType.ROOK: {
+                        image = "rook";
+                        break;
+                    }
+                    case PieceType.KNIGHT: {
+                        image = "knight";
+                        break;
+
+                    }
+                    case PieceType.BISHOP: {
+                        image = "bishop";
+                        break;
+                    }
+                    case PieceType.QUEEN: {
+                        image = "queen";
+                    }
+                }
+                piece.image = `assets/images/${image}_${teamType}.png`;
+            }
+
+            results.push(piece);
+            return results;
+        }, [] as Piece[])
+
+        setPieces(updatedPieces);
+
+        modalRef.current?.classList.add("hidden")
     }
 
     let board = [];
