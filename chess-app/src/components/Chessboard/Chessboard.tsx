@@ -6,6 +6,7 @@ import {verticalAxis, horizontalAxis, gridSize, Piece, PieceType, TeamType, init
 
 export default function Chessboard() {
     const [activePiece, setActivePiece] = useState<HTMLElement | null>(null);
+    const [promotionPawn, setPromotionPawn] = useState<Piece>();
     const [grabPosition, setGrabPosition] = useState<Position>({horizontalPosition: -1, verticalPosition: -1})
     const [pieces, setPieces] = useState<Piece[]>(initialBoardState);
     const chessboardRef = useRef<HTMLDivElement>(null);
@@ -125,7 +126,7 @@ export default function Chessboard() {
                             let promotionRow = (piece.team === TeamType.OUR) ? 7 : 0;
 
                             if (y === promotionRow) {
-                                console.log('This piece is up for promotion')
+                                setPromotionPawn(piece);
                             }
                             results.push(piece);
                         } else if (!(samePosition(piece.position, {horizontalPosition: x, verticalPosition: y}))) {
@@ -151,6 +152,10 @@ export default function Chessboard() {
         }
     } 
 
+    function promotePawn(pieceType: PieceType) {
+        console.log(`Promoting pawn into ${pieceType}`);
+        console.log(promotionPawn);
+    }
 
     let board = [];
 
@@ -168,10 +173,10 @@ export default function Chessboard() {
     return (
         <>
             <div id="pawn-promotion-modal">
-                <img src="/assets/images/rook_w.png"/>
-                <img src="/assets/images/knight_w.png"/>
-                <img src="/assets/images/bishop_w.png"/>
-                <img src="/assets/images/queen_w.png"/>
+                <img onClick={() => promotePawn(PieceType.ROOK)} src="/assets/images/rook_w.png"/>
+                <img onClick={() => promotePawn(PieceType.KNIGHT)} src="/assets/images/knight_w.png"/>
+                <img onClick={() => promotePawn(PieceType.BISHOP)} src="/assets/images/bishop_w.png"/>
+                <img onClick={() => promotePawn(PieceType.QUEEN)} src="/assets/images/queen_w.png"/>
             </div>
             <div 
                 onMouseMove={(e) => movePiece(e)} 
