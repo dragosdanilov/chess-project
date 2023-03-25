@@ -126,7 +126,7 @@ export default function Chessboard() {
 
                             let promotionRow = (piece.team === TeamType.OUR) ? 7 : 0;
 
-                            if (y === promotionRow) {
+                            if (y === promotionRow && piece.type === PieceType.PAWN) {
                                 modalRef.current?.classList.remove("hidden");
                                 setPromotionPawn(piece);
                             }
@@ -193,6 +193,10 @@ export default function Chessboard() {
         modalRef.current?.classList.add("hidden")
     }
 
+    function promotionTeamType() {
+        return (promotionPawn?.team === TeamType.OUR) ? "w" : "b";
+    }
+
     let board = [];
 
     for (let j = verticalAxis.length - 1; j >= 0; j--) {
@@ -210,10 +214,10 @@ export default function Chessboard() {
         <>
             <div id="pawn-promotion-modal" className="hidden" ref={modalRef}>
                 <div className="modal-body">
-                    <img onClick={() => promotePawn(PieceType.ROOK)} src="/assets/images/rook_w.png"/>
-                    <img onClick={() => promotePawn(PieceType.KNIGHT)} src="/assets/images/knight_w.png"/>
-                    <img onClick={() => promotePawn(PieceType.BISHOP)} src="/assets/images/bishop_w.png"/>
-                    <img onClick={() => promotePawn(PieceType.QUEEN)} src="/assets/images/queen_w.png"/>
+                    <img onClick={() => promotePawn(PieceType.ROOK)} src={`/assets/images/rook_${promotionTeamType()}.png`}/>
+                    <img onClick={() => promotePawn(PieceType.KNIGHT)} src={`/assets/images/knight_${promotionTeamType()}.png`}/>
+                    <img onClick={() => promotePawn(PieceType.BISHOP)} src={`/assets/images/bishop_${promotionTeamType()}.png`}/>
+                    <img onClick={() => promotePawn(PieceType.QUEEN)} src={`/assets/images/queen_${promotionTeamType()}.png`}/>
                 </div>
             </div>
 
