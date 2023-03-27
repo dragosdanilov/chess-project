@@ -49,3 +49,23 @@ export const pawnMove = (initialPosition: Position, desiredPosition: Position, t
     }
     return false;
 }
+
+export const GetPossiblePawnMoves = (pawn: Piece, boardState: Piece[]) : Position[] => {
+    const possibleMoves: Position[] = [];
+
+    const specialRow = pawn.team === TeamType.OUR ? 1 : 6;
+    const pawnDirection = pawn.team === TeamType.OUR ? 1 : -1;
+
+    if (!tileIsOccupied(
+        {horizontalPosition: pawn.position.horizontalPosition, verticalPosition: pawn.position.verticalPosition + pawnDirection}, boardState))
+    {
+        possibleMoves.push({horizontalPosition: pawn.position.horizontalPosition, verticalPosition: pawn.position.verticalPosition + pawnDirection})
+
+        if (pawn.position.verticalPosition === specialRow &&
+            !tileIsOccupied({horizontalPosition: pawn.position.horizontalPosition, verticalPosition: pawn.position.verticalPosition + pawnDirection * 2}, boardState))
+            {
+                possibleMoves.push({horizontalPosition: pawn.position.horizontalPosition, verticalPosition: pawn.position.verticalPosition + pawnDirection * 2})
+            }
+    }
+    return possibleMoves;
+}
