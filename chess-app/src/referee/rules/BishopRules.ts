@@ -1,5 +1,5 @@
 import { Piece, Position, samePosition, TeamType } from "../../Constants";
-import { tileIsEmptyOrOccupiedByOpponent, tileIsOccupied } from "./GeneralRules";
+import { tileIsEmptyOrOccupiedByOpponent, tileIsOccupied, tileIsOccupiedByOpponent } from "./GeneralRules";
 
 export const bishopMove = (initialPosition: Position, desiredPosition: Position, team: TeamType, boardState: Piece[]): boolean => {
     // MOVEMENT LOGIC FOR THE BISHOP
@@ -75,4 +75,65 @@ export const bishopMove = (initialPosition: Position, desiredPosition: Position,
         }
     }
     return false;
+}
+
+export const getPossibleBishopMoves = (bishop: Piece, boardState: Piece[]): Position[] => {
+    const possibleMoves: Position[] = [];
+
+    // top right movement
+    for (let i = 1; i < 8; i++) {
+        const topRightPath: Position = {horizontalPosition: bishop.position.horizontalPosition + i, verticalPosition: bishop.position.verticalPosition + i};
+
+        if (!tileIsOccupied(topRightPath, boardState)) {
+            possibleMoves.push(topRightPath);
+        } else if (tileIsOccupiedByOpponent(topRightPath, boardState, bishop.team)) {
+            possibleMoves.push(topRightPath);
+            break;
+        } else {
+            break;
+        }
+    }
+
+    // bottom right movement
+    for (let i = 1; i < 8; i++) {
+        const bottomRightPath: Position = {horizontalPosition: bishop.position.horizontalPosition + i, verticalPosition: bishop.position.verticalPosition - i};
+
+        if (!tileIsOccupied(bottomRightPath, boardState)) {
+            possibleMoves.push(bottomRightPath);
+        } else if (tileIsOccupiedByOpponent(bottomRightPath, boardState, bishop.team)) {
+            possibleMoves.push(bottomRightPath);
+            break;
+        } else {
+            break;
+        }
+    }
+
+    // top left movement
+    for (let i = 1; i < 8; i++) {
+        const topLeftMovement: Position = {horizontalPosition: bishop.position.horizontalPosition - i, verticalPosition: bishop.position.verticalPosition + i};
+
+        if (!tileIsOccupied(topLeftMovement, boardState)) {
+            possibleMoves.push(topLeftMovement);
+        } else if (tileIsOccupiedByOpponent(topLeftMovement, boardState, bishop.team)) {
+            possibleMoves.push(topLeftMovement);
+            break;
+        } else {
+            break;
+        }
+    }
+
+    // bottom left movement
+    for (let i = 1; i < 8; i++) {
+        const bottomLeftMovement: Position = {horizontalPosition: bishop.position.horizontalPosition - i, verticalPosition: bishop.position.verticalPosition - i};
+
+        if (!tileIsOccupied(bottomLeftMovement, boardState)) {
+            possibleMoves.push(bottomLeftMovement);
+        } else if (tileIsOccupiedByOpponent(bottomLeftMovement, boardState, bishop.team)) {
+            possibleMoves.push(bottomLeftMovement);
+            break;
+        } else {
+            break;
+        }
+    }
+    return possibleMoves;
 }
