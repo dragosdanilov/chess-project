@@ -42,11 +42,3 @@
     cursor: pointer;
     transition: 0.2s;
 }
-
-.tile-highlight::before {
-    content: " ";
-    width: 24px;
-    height: 24px;
-    border-radius: 50%;
-    background-color: rgb(0, 0, 0, 0.4);
-}
