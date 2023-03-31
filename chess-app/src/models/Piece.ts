@@ -7,9 +7,9 @@ export class Piece {
     team: TeamType;
     enPassant?: boolean;
     possibleMoves?: Position[];
-    constructor(image: string, position: Position, 
-        type: PieceType, team: TeamType) {
-        this.image = image; //'assets/images/rook_b.png';
+    constructor(position: Position, type: PieceType, 
+        team: TeamType) {
+        this.image = `assets/images/${type}_${team}.png`;
         this.position = position;
         this.type = type;
         this.team = team;

@@ -15,178 +15,177 @@ export interface Position {
 }
 
 export enum PieceType {
-    PAWN,
-    BISHOP,
-    KNIGHT,
-    ROOK,
-    QUEEN,
-    KING
+    PAWN = 'pawn',
+    BISHOP = 'bishop',
+    KNIGHT = 'knight',
+    ROOK = 'rook',
+    QUEEN = 'queen',
+    KING = 'king'
 }
 
 export enum TeamType {
-    OPPONENT,
-    OUR
+    OPPONENT = 'b',
+    OUR = 'w'
 }
 
 export const initialBoardState: Piece[] = [
-    new Piece(`assets/images/rook_b.png`, 
+    new Piece( 
     {horizontalPosition: 0, verticalPosition: 7}, 
     PieceType.ROOK, 
     TeamType.OPPONENT),
 
-    new Piece('assets/images/knight_b.png', 
+    new Piece( 
     {horizontalPosition: 1, verticalPosition: 7}, 
     PieceType.KNIGHT,
     TeamType.OPPONENT),
 
-    new Piece('assets/images/bishop_b.png', 
+    new Piece( 
     {horizontalPosition: 2, verticalPosition: 7}, 
     PieceType.BISHOP,
     TeamType.OPPONENT),
 
-    new Piece('assets/images/queen_b.png', 
+    new Piece( 
     {horizontalPosition: 3, verticalPosition: 7}, 
     PieceType.QUEEN,
     TeamType.OPPONENT),
 
-    new Piece('assets/images/king_b.png', 
+    new Piece( 
     {horizontalPosition: 4, verticalPosition: 7}, 
     PieceType.KING,
     TeamType.OPPONENT),
 
-    new Piece('assets/images/bishop_b.png', 
+    new Piece( 
     {horizontalPosition: 5, verticalPosition: 7}, 
     PieceType.BISHOP,
     TeamType.OPPONENT),
 
-    new Piece('assets/images/knight_b.png', 
+    new Piece( 
     {horizontalPosition: 6, verticalPosition: 7}, 
     PieceType.KNIGHT,
     TeamType.OPPONENT),
 
-    new Piece('assets/images/rook_b.png', 
+    new Piece( 
     {horizontalPosition: 7, verticalPosition: 7}, 
     PieceType.ROOK,
     TeamType.OPPONENT),
 
-    new Piece('assets/images/pawn_b.png', 
+    new Piece( 
     {horizontalPosition: 0, verticalPosition: 6}, 
     PieceType.PAWN,
     TeamType.OPPONENT),
 
-    new Piece('assets/images/pawn_b.png', 
+    new Piece( 
     {horizontalPosition: 1, verticalPosition: 6}, 
     PieceType.PAWN,
     TeamType.OPPONENT),
 
-    new Piece('assets/images/pawn_b.png', 
+    new Piece( 
     {horizontalPosition: 2, verticalPosition: 6}, 
     PieceType.PAWN,
     TeamType.OPPONENT),
 
-    new Piece('assets/images/pawn_b.png', 
+    new Piece( 
     {horizontalPosition: 3, verticalPosition: 6}, 
     PieceType.PAWN,
     TeamType.OPPONENT),
 
-    new Piece('assets/images/pawn_b.png', 
+    new Piece( 
     {horizontalPosition: 4, verticalPosition: 6}, 
     PieceType.PAWN,
     TeamType.OPPONENT),
 
-    new Piece('assets/images/pawn_b.png', 
+    new Piece( 
     {horizontalPosition: 5, verticalPosition: 6}, 
     PieceType.PAWN,
     TeamType.OPPONENT),
 
-    new Piece('assets/images/pawn_b.png', 
+    new Piece( 
     {horizontalPosition: 6, verticalPosition: 6}, 
     PieceType.PAWN,
     TeamType.OPPONENT),
 
-    new Piece('assets/images/pawn_b.png', 
+    new Piece( 
     {horizontalPosition: 7, verticalPosition: 6}, 
     PieceType.PAWN,
     TeamType.OPPONENT),
 
-    new Piece(`assets/images/rook_w.png`, 
+    new Piece( 
     {horizontalPosition: 0, verticalPosition: 0}, 
     PieceType.ROOK, 
     TeamType.OUR),
 
-    new Piece('assets/images/knight_w.png', 
+    new Piece( 
     {horizontalPosition: 1, verticalPosition: 0}, 
     PieceType.KNIGHT,
     TeamType.OUR),
 
-    new Piece('assets/images/bishop_w.png', 
+    new Piece( 
     {horizontalPosition: 2, verticalPosition: 0}, 
     PieceType.BISHOP,
     TeamType.OUR),
 
-    new Piece('assets/images/queen_w.png', 
+    new Piece( 
     {horizontalPosition: 3, verticalPosition: 0}, 
     PieceType.QUEEN,
     TeamType.OUR),
 
-    new Piece('assets/images/king_w.png', 
+    new Piece( 
     {horizontalPosition: 4, verticalPosition: 0}, 
     PieceType.KING,
     TeamType.OUR),
 
-    new Piece('assets/images/bishop_w.png', 
+    new Piece( 
     {horizontalPosition: 5, verticalPosition: 0}, 
     PieceType.BISHOP,
     TeamType.OUR),
 
-    new Piece('assets/images/knight_w.png', 
+    new Piece( 
     {horizontalPosition: 6, verticalPosition: 0}, 
     PieceType.KNIGHT,
     TeamType.OUR),
 
-    new Piece('assets/images/rook_w.png', 
+    new Piece( 
     {horizontalPosition: 7, verticalPosition: 0}, 
     PieceType.ROOK,
     TeamType.OUR),
 
-    new Piece('assets/images/pawn_w.png', 
+    new Piece( 
     {horizontalPosition: 0, verticalPosition: 1}, 
     PieceType.PAWN,
     TeamType.OUR),
 
-    new Piece('assets/images/pawn_w.png', 
+    new Piece( 
     {horizontalPosition: 1, verticalPosition: 1}, 
     PieceType.PAWN,
     TeamType.OUR),
 
-    new Piece('assets/images/pawn_w.png', 
+    new Piece( 
     {horizontalPosition: 2, verticalPosition: 1}, 
     PieceType.PAWN,
     TeamType.OUR),
 
-    new Piece('assets/images/pawn_w.png', 
+    new Piece( 
     {horizontalPosition: 3, verticalPosition: 1}, 
     PieceType.PAWN,
     TeamType.OUR),
 
-    new Piece('assets/images/pawn_w.png', 
+    new Piece( 
     {horizontalPosition: 4, verticalPosition: 1}, 
     PieceType.PAWN,
     TeamType.OUR),
 
-    new Piece('assets/images/pawn_w.png', 
+    new Piece( 
     {horizontalPosition: 5, verticalPosition: 1}, 
     PieceType.PAWN,
     TeamType.OUR),
 
-    new Piece('assets/images/pawn_w.png', 
+    new Piece( 
     {horizontalPosition: 6, verticalPosition: 1}, 
     PieceType.PAWN,
     TeamType.OUR),
 
-    new Piece('assets/images/pawn_w.png', 
+    new Piece( 
     {horizontalPosition: 7, verticalPosition: 1}, 
     PieceType.PAWN,
     TeamType.OUR),
-
 ];
