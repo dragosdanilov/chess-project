@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
-import { initialBoardState, PieceType, Position, TeamType, samePosition } from "../../Constants";
-import { Piece } from "../../models/Piece";
+import { initialBoardState, PieceType, TeamType, samePosition } from "../../Constants";
+import { Piece, Position } from "../../models";
 import { bishopMove, getPossibleBishopMoves, getPossibleKingMoves, getPossibleKnightMoves, getPossiblePawnMoves, getPossibleQueenMoves, getPossibleRookMoves, kingMove, knightMove, pawnMove, queenMove, rookMove } from "../../referee/rules";
 import Chessboard from "../Chessboard/Chessboard";
 
@@ -11,7 +11,7 @@ export default function Referee() {
 
     useEffect(() => {
         updatePossibleMoves();
-    }, [])
+    }, []);
     function updatePossibleMoves() {
         setPieces((currentPieces) => {
             return currentPieces.map(p => {
@@ -42,7 +42,7 @@ export default function Referee() {
                         piece.position.verticalPosition = destination.verticalPosition;
                         results.push(piece);
                     } else if (
-                        !(samePosition(piece.position, {horizontalPosition: destination.horizontalPosition, verticalPosition: destination.verticalPosition - pawnDirection}))
+                        !(samePosition(piece.position, new Position(destination.horizontalPosition, destination.verticalPosition - pawnDirection)))
                     ) {
                         if (piece.type === PieceType.PAWN) {
                             piece.enPassant = false;
@@ -50,7 +50,7 @@ export default function Referee() {
                         results.push(piece);
                     }
                     return results;
-                }, [] as Piece[])
+                }, [] as Piece[]);
 
                 updatePossibleMoves();
                 setPieces(updatedPieces);
@@ -78,7 +78,7 @@ export default function Referee() {
                             setPromotionPawn(piece);
                         }
                         results.push(piece);
-                    } else if (!(samePosition(piece.position, {horizontalPosition: destination.horizontalPosition, verticalPosition: destination.verticalPosition}))) {
+                    } else if (!(samePosition(piece.position, new Position(destination.horizontalPosition, destination.verticalPosition)))) {
                         if (piece.type === PieceType.PAWN) {
                             piece.enPassant = false;
                         }

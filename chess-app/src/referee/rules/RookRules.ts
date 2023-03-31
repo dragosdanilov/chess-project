@@ -1,5 +1,5 @@
-import { Position, samePosition, TeamType } from "../../Constants";
-import { Piece } from "../../models/Piece";
+import { samePosition, TeamType } from "../../Constants";
+import { Piece, Position } from "../../models";
 import { tileIsEmptyOrOccupiedByOpponent, tileIsOccupied, tileIsOccupiedByOpponent } from "./GeneralRules";
 
 export const rookMove = (initialPosition: Position, desiredPosition: Position, team: TeamType, boardState: Piece[]): boolean => {
@@ -8,7 +8,7 @@ export const rookMove = (initialPosition: Position, desiredPosition: Position, t
         if (desiredPosition.horizontalPosition === initialPosition.horizontalPosition) {
         // VERTICAL ROOK MOVEMENT
             let multiplier = (desiredPosition.verticalPosition > initialPosition.verticalPosition) ? 1 : -1;
-            let passedPosition: Position = {horizontalPosition: initialPosition.horizontalPosition, verticalPosition: initialPosition.verticalPosition + (i*multiplier)};
+            let passedPosition = new Position(initialPosition.horizontalPosition, initialPosition.verticalPosition + (i*multiplier));
             // Check if the tile is the destination tile
             if (samePosition(passedPosition, desiredPosition)) {
                 // Dealing with destination tile
@@ -25,7 +25,7 @@ export const rookMove = (initialPosition: Position, desiredPosition: Position, t
         if (desiredPosition.verticalPosition === initialPosition.verticalPosition) {
         // HORIZONTAL ROOK MOVEMENT
             let multiplier = (desiredPosition.horizontalPosition > initialPosition.horizontalPosition) ? 1 : -1;
-            let passedPosition: Position = {horizontalPosition: initialPosition.horizontalPosition + (i*multiplier), verticalPosition: initialPosition.verticalPosition};
+            let passedPosition = new Position(initialPosition.horizontalPosition + (i*multiplier), initialPosition.verticalPosition);
             // Check if the tile is the destination tile
             if (samePosition(passedPosition, desiredPosition)) {
                 // Dealing with destination tile
@@ -48,7 +48,7 @@ export const getPossibleRookMoves = (rook: Piece, boardState: Piece[]): Position
 
     // vertical path
     for (let i = 1; i < 8; i++) {
-        const topPath: Position = {horizontalPosition: rook.position.horizontalPosition, verticalPosition: rook.position.verticalPosition + i};
+        const topPath = new Position(rook.position.horizontalPosition, rook.position.verticalPosition + i);
 
         if (!tileIsOccupied(topPath, boardState)) {
             possibleMoves.push(topPath);
@@ -61,7 +61,7 @@ export const getPossibleRookMoves = (rook: Piece, boardState: Piece[]): Position
     }
 
     for (let i = 1; i < 8; i++) {
-        const bottomPath: Position = {horizontalPosition: rook.position.horizontalPosition, verticalPosition: rook.position.verticalPosition - i};
+        const bottomPath = new Position(rook.position.horizontalPosition, rook.position.verticalPosition - i);
 
         if (!tileIsOccupied(bottomPath, boardState)) {
             possibleMoves.push(bottomPath);
@@ -75,7 +75,7 @@ export const getPossibleRookMoves = (rook: Piece, boardState: Piece[]): Position
 
     // horizontal path
     for (let i = 1; i < 8; i++) {
-        const rightPath: Position = {horizontalPosition: rook.position.horizontalPosition + i, verticalPosition: rook.position.verticalPosition};
+        const rightPath = new Position(rook.position.horizontalPosition + i, rook.position.verticalPosition);
 
         if (!tileIsOccupied(rightPath, boardState)) {
             possibleMoves.push(rightPath);
@@ -88,7 +88,7 @@ export const getPossibleRookMoves = (rook: Piece, boardState: Piece[]): Position
     }
 
     for (let i = 1; i < 8; i++) {
-        const leftPath: Position = {horizontalPosition: rook.position.horizontalPosition - i, verticalPosition: rook.position.verticalPosition};
+        const leftPath = new Position(rook.position.horizontalPosition - i, rook.position.verticalPosition);
 
         if (!tileIsOccupied(leftPath, boardState)) {
             possibleMoves.push(leftPath);

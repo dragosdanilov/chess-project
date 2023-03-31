@@ -1,5 +1,5 @@
-import { Position, samePosition, TeamType } from "../../Constants";
-import { Piece } from "../../models/Piece";
+import { samePosition, TeamType } from "../../Constants";
+import { Piece, Position } from "../../models";
 import { tileIsEmptyOrOccupiedByOpponent, tileIsOccupied, tileIsOccupiedByOpponent } from "./GeneralRules";
 
 export const queenMove = (initialPosition: Position, desiredPosition: Position, team: TeamType, boardState: Piece[]): boolean => {
@@ -10,7 +10,7 @@ export const queenMove = (initialPosition: Position, desiredPosition: Position, 
 
         let multiplierY = (desiredPosition.verticalPosition < initialPosition.verticalPosition) ? -1 : (desiredPosition.verticalPosition > initialPosition.verticalPosition) ? 1 : 0;
 
-        let passedPosition: Position = {horizontalPosition: initialPosition.horizontalPosition + (i*multiplierX), verticalPosition: initialPosition.verticalPosition + (i*multiplierY)};
+        let passedPosition = new Position(initialPosition.horizontalPosition + (i*multiplierX), initialPosition.verticalPosition + (i*multiplierY));
         // Check if the tile is the destination tile
         if (samePosition(passedPosition, desiredPosition)) {
             // Dealing with destination tile
@@ -32,7 +32,7 @@ export const getPossibleQueenMoves = (queen: Piece, boardState: Piece[]): Positi
 
     // vertical path
     for (let i = 1; i < 8; i++) {
-        const topPath: Position = {horizontalPosition: queen.position.horizontalPosition, verticalPosition: queen.position.verticalPosition + i};
+        const topPath = new Position(queen.position.horizontalPosition, queen.position.verticalPosition + i);
 
         if (!tileIsOccupied(topPath, boardState)) {
             possibleMoves.push(topPath);
@@ -45,7 +45,7 @@ export const getPossibleQueenMoves = (queen: Piece, boardState: Piece[]): Positi
     }
 
     for (let i = 1; i < 8; i++) {
-        const bottomPath: Position = {horizontalPosition: queen.position.horizontalPosition, verticalPosition: queen.position.verticalPosition - i};
+        const bottomPath = new Position(queen.position.horizontalPosition, queen.position.verticalPosition - i);
 
         if (!tileIsOccupied(bottomPath, boardState)) {
             possibleMoves.push(bottomPath);
@@ -59,7 +59,7 @@ export const getPossibleQueenMoves = (queen: Piece, boardState: Piece[]): Positi
 
     // horizontal path
     for (let i = 1; i < 8; i++) {
-        const rightPath: Position = {horizontalPosition: queen.position.horizontalPosition + i, verticalPosition: queen.position.verticalPosition};
+        const rightPath = new Position(queen.position.horizontalPosition + i, queen.position.verticalPosition);
 
         if (!tileIsOccupied(rightPath, boardState)) {
             possibleMoves.push(rightPath);
@@ -72,7 +72,7 @@ export const getPossibleQueenMoves = (queen: Piece, boardState: Piece[]): Positi
     }
 
     for (let i = 1; i < 8; i++) {
-        const leftPath: Position = {horizontalPosition: queen.position.horizontalPosition - i, verticalPosition: queen.position.verticalPosition};
+        const leftPath = new Position(queen.position.horizontalPosition - i, queen.position.verticalPosition);
 
         if (!tileIsOccupied(leftPath, boardState)) {
             possibleMoves.push(leftPath);
@@ -86,7 +86,7 @@ export const getPossibleQueenMoves = (queen: Piece, boardState: Piece[]): Positi
 
     // top right path
     for (let i = 1; i < 8; i++) {
-        const topRightPath: Position = {horizontalPosition: queen.position.horizontalPosition + i, verticalPosition: queen.position.verticalPosition + i};
+        const topRightPath = new Position(queen.position.horizontalPosition + i, queen.position.verticalPosition + i);
 
         if (!tileIsOccupied(topRightPath, boardState)) {
             possibleMoves.push(topRightPath);
@@ -100,7 +100,7 @@ export const getPossibleQueenMoves = (queen: Piece, boardState: Piece[]): Positi
 
     // bottom right path
     for (let i = 1; i < 8; i++) {
-        const bottomRightPath: Position = {horizontalPosition: queen.position.horizontalPosition + i, verticalPosition: queen.position.verticalPosition - i};
+        const bottomRightPath = new Position(queen.position.horizontalPosition + i, queen.position.verticalPosition - i);
 
         if (!tileIsOccupied(bottomRightPath, boardState)) {
             possibleMoves.push(bottomRightPath);
@@ -114,7 +114,7 @@ export const getPossibleQueenMoves = (queen: Piece, boardState: Piece[]): Positi
 
     // top left path
     for (let i = 1; i < 8; i++) {
-        const topLeftPath: Position = {horizontalPosition: queen.position.horizontalPosition - i, verticalPosition: queen.position.verticalPosition + i};
+        const topLeftPath = new Position(queen.position.horizontalPosition - i, queen.position.verticalPosition + i);
 
         if (!tileIsOccupied(topLeftPath, boardState)) {
             possibleMoves.push(topLeftPath);
@@ -128,7 +128,7 @@ export const getPossibleQueenMoves = (queen: Piece, boardState: Piece[]): Positi
 
     // bottom left path
     for (let i = 1; i < 8; i++) {
-        const bottomLeftPath: Position = {horizontalPosition: queen.position.horizontalPosition - i, verticalPosition: queen.position.verticalPosition - i};
+        const bottomLeftPath = new Position(queen.position.horizontalPosition - i, queen.position.verticalPosition - i);
 
         if (!tileIsOccupied(bottomLeftPath, boardState)) {
             possibleMoves.push(bottomLeftPath);

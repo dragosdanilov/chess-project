@@ -1,5 +1,5 @@
-import { Position, samePosition, TeamType } from "../../Constants";
-import { Piece } from "../../models/Piece";
+import { samePosition, TeamType } from "../../Constants";
+import { Piece, Position } from "../../models";
 import { tileIsEmptyOrOccupiedByOpponent, tileIsOccupied, tileIsOccupiedByOpponent } from "./GeneralRules";
 
 export const kingMove = (initialPosition: Position, desiredPosition: Position, team: TeamType, boardState: Piece[]): boolean => {
@@ -9,7 +9,7 @@ export const kingMove = (initialPosition: Position, desiredPosition: Position, t
 
         let multiplierY = (desiredPosition.verticalPosition < initialPosition.verticalPosition) ? -1 : (desiredPosition.verticalPosition > initialPosition.verticalPosition) ? 1 : 0;
 
-        let passedPosition: Position = {horizontalPosition: initialPosition.horizontalPosition + (i*multiplierX), verticalPosition: initialPosition.verticalPosition + (i*multiplierY)};
+        let passedPosition = new Position(initialPosition.horizontalPosition + (i*multiplierX), initialPosition.verticalPosition + (i*multiplierY));
         // Check if the tile is the destination tile
         if (samePosition(passedPosition, desiredPosition)) {
             // Dealing with destination tile
@@ -31,7 +31,7 @@ export const getPossibleKingMoves = (king: Piece, boardState: Piece[]): Position
 
     // vertical path
     for (let i = 1; i < 2; i++) {
-        const topPath: Position = {horizontalPosition: king.position.horizontalPosition, verticalPosition: king.position.verticalPosition + i};
+        const topPath = new Position(king.position.horizontalPosition, king.position.verticalPosition + i);
 
         if (!tileIsOccupied(topPath, boardState)) {
             possibleMoves.push(topPath);
@@ -44,7 +44,7 @@ export const getPossibleKingMoves = (king: Piece, boardState: Piece[]): Position
     }
 
     for (let i = 1; i < 2; i++) {
-        const bottomPath: Position = {horizontalPosition: king.position.horizontalPosition, verticalPosition: king.position.verticalPosition - i};
+        const bottomPath = new Position(king.position.horizontalPosition, king.position.verticalPosition - i);
 
         if (!tileIsOccupied(bottomPath, boardState)) {
             possibleMoves.push(bottomPath);
@@ -58,7 +58,7 @@ export const getPossibleKingMoves = (king: Piece, boardState: Piece[]): Position
 
     // horizontal path
     for (let i = 1; i < 2; i++) {
-        const rightPath: Position = {horizontalPosition: king.position.horizontalPosition + i, verticalPosition: king.position.verticalPosition};
+        const rightPath = new Position(king.position.horizontalPosition + i, king.position.verticalPosition);
 
         if (!tileIsOccupied(rightPath, boardState)) {
             possibleMoves.push(rightPath);
@@ -71,7 +71,7 @@ export const getPossibleKingMoves = (king: Piece, boardState: Piece[]): Position
     }
 
     for (let i = 1; i < 2; i++) {
-        const leftPath: Position = {horizontalPosition: king.position.horizontalPosition - i, verticalPosition: king.position.verticalPosition};
+        const leftPath = new Position(king.position.horizontalPosition - i, king.position.verticalPosition);
 
         if (!tileIsOccupied(leftPath, boardState)) {
             possibleMoves.push(leftPath);
@@ -85,7 +85,7 @@ export const getPossibleKingMoves = (king: Piece, boardState: Piece[]): Position
 
     // top right path
     for (let i = 1; i < 2; i++) {
-        const topRightPath: Position = {horizontalPosition: king.position.horizontalPosition + i, verticalPosition: king.position.verticalPosition + i};
+        const topRightPath = new Position(king.position.horizontalPosition + i, king.position.verticalPosition + i);
 
         if (!tileIsOccupied(topRightPath, boardState)) {
             possibleMoves.push(topRightPath);
@@ -99,7 +99,7 @@ export const getPossibleKingMoves = (king: Piece, boardState: Piece[]): Position
 
     // bottom right path
     for (let i = 1; i < 2; i++) {
-        const bottomRightPath: Position = {horizontalPosition: king.position.horizontalPosition + i, verticalPosition: king.position.verticalPosition - i};
+        const bottomRightPath = new Position(king.position.horizontalPosition + i, king.position.verticalPosition - i);
 
         if (!tileIsOccupied(bottomRightPath, boardState)) {
             possibleMoves.push(bottomRightPath);
@@ -113,7 +113,7 @@ export const getPossibleKingMoves = (king: Piece, boardState: Piece[]): Position
 
     // top left path
     for (let i = 1; i < 2; i++) {
-        const topLeftPath: Position = {horizontalPosition: king.position.horizontalPosition - i, verticalPosition: king.position.verticalPosition + i};
+        const topLeftPath = new Position(king.position.horizontalPosition - i, king.position.verticalPosition + i);
 
         if (!tileIsOccupied(topLeftPath, boardState)) {
             possibleMoves.push(topLeftPath);
@@ -127,7 +127,7 @@ export const getPossibleKingMoves = (king: Piece, boardState: Piece[]): Position
 
     // bottom left path
     for (let i = 1; i < 2; i++) {
-        const bottomLeftPath: Position = {horizontalPosition: king.position.horizontalPosition - i, verticalPosition: king.position.verticalPosition - i};
+        const bottomLeftPath = new Position(king.position.horizontalPosition - i, king.position.verticalPosition - i);
 
         if (!tileIsOccupied(bottomLeftPath, boardState)) {
             possibleMoves.push(bottomLeftPath);
