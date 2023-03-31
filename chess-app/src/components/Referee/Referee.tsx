@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
-import { initialBoardState, Piece, PieceType, Position, TeamType, samePosition } from "../../Constants";
+import { initialBoardState, PieceType, Position, TeamType, samePosition } from "../../Constants";
+import { Piece } from "../../models/Piece";
 import { bishopMove, getPossibleBishopMoves, getPossibleKingMoves, getPossibleKnightMoves, getPossiblePawnMoves, getPossibleQueenMoves, getPossibleRookMoves, kingMove, knightMove, pawnMove, queenMove, rookMove } from "../../referee/rules";
 import Chessboard from "../Chessboard/Chessboard";
 
