@@ -6,10 +6,6 @@ export const horizontalAxis = ["a", "b", "c", "d", "e", "f", "g", "h"];
 
 export const gridSize = 100;
 
-export function samePosition(p1: Position, p2: Position) {
-    return p1.horizontalPosition === p2.horizontalPosition && p1.verticalPosition === p2.verticalPosition
-}
-
 export enum PieceType {
     PAWN = 'pawn',
     BISHOP = 'bishop',
