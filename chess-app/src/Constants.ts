@@ -1,24 +1,11 @@
 import { Piece } from "./models/Piece";
 import { Position } from "./models/Position";
+import { PieceType, TeamType } from "./Types";
 
 export const verticalAxis = ["1", "2", "3", "4", "5", "6", "7", "8"];
 export const horizontalAxis = ["a", "b", "c", "d", "e", "f", "g", "h"];
 
 export const gridSize = 100;
-
-export enum PieceType {
-    PAWN = 'pawn',
-    BISHOP = 'bishop',
-    KNIGHT = 'knight',
-    ROOK = 'rook',
-    QUEEN = 'queen',
-    KING = 'king'
-}
-
-export enum TeamType {
-    OPPONENT = 'b',
-    OUR = 'w'
-}
 
 export const initialBoardState: Piece[] = [
     new Piece( 
