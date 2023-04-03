@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { initialBoardState } from "../../Constants";
 import { Piece, Position } from "../../models";
+import { Pawn } from "../../models/Pawn";
 import { bishopMove, getPossibleBishopMoves, getPossibleKingMoves, getPossibleKnightMoves, getPossiblePawnMoves, getPossibleQueenMoves, getPossibleRookMoves, kingMove, knightMove, pawnMove, queenMove, rookMove } from "../../referee/rules";
 import { PieceType, TeamType } from "../../Types";
 import Chessboard from "../Chessboard/Chessboard";
@@ -38,15 +39,16 @@ export default function Referee() {
                     if (
                         piece.samePiecePosition(playedPiece)
                     ) {
-                        piece.enPassant = false;
+                        if (piece.isPawn)
+                            (piece as Pawn).enPassant = false;
                         piece.position.horizontalPosition = destination.horizontalPosition;
                         piece.position.verticalPosition = destination.verticalPosition;
                         results.push(piece);
                     } else if (
                         !(piece.samePosition(new Position(destination.horizontalPosition, destination.verticalPosition - pawnDirection)))
                     ) {
-                        if (piece.type === PieceType.PAWN) {
-                            piece.enPassant = false;
+                        if (piece.isPawn) {
+                            (piece as Pawn).enPassant = false;
                         }
                         results.push(piece);
                     }
@@ -65,23 +67,24 @@ export default function Referee() {
                         piece.samePiecePosition(playedPiece)
                     ) {
                         // SPECIAL MOVE
-                        piece.enPassant = 
-                            Math.abs(playedPiece.position.verticalPosition - destination.verticalPosition) === 2 && 
-                            piece.type === PieceType.PAWN;
+                        if (piece.isPawn)
+                            (piece as Pawn).enPassant = 
+                                Math.abs(playedPiece.position.verticalPosition - destination.verticalPosition) === 2 && 
+                                piece.type === PieceType.PAWN;
                                 
                         piece.position.horizontalPosition = destination.horizontalPosition;
                         piece.position.verticalPosition = destination.verticalPosition;
 
                         let promotionRow = (piece.team === TeamType.OUR) ? 7 : 0;
 
-                        if (destination.verticalPosition === promotionRow && piece.type === PieceType.PAWN) {
+                        if (destination.verticalPosition === promotionRow && playedPiece.isPawn) {
                             modalRef.current?.classList.remove("hidden");
                             setPromotionPawn(piece);
                         }
                         results.push(piece);
                     } else if (!(piece.samePosition(new Position(destination.horizontalPosition, destination.verticalPosition)))) {
-                        if (piece.type === PieceType.PAWN) {
-                            piece.enPassant = false;
+                        if (piece.isPawn) {
+                            (piece as Pawn).enPassant = false;
                         }
                         results.push(piece);
                     }
@@ -102,7 +105,12 @@ export default function Referee() {
 
         if (type === PieceType.PAWN) {
             if ((desiredPosition.horizontalPosition - initialPosition.horizontalPosition === -1 || desiredPosition.horizontalPosition - initialPosition.horizontalPosition === 1) && desiredPosition.verticalPosition - initialPosition.verticalPosition === pawnDirection) {
-                const piece = pieces.find(p => p.position.horizontalPosition === desiredPosition.horizontalPosition && p.position.verticalPosition === desiredPosition.verticalPosition - pawnDirection && p.enPassant);
+                const piece = pieces.find(
+                    (p) => 
+                        p.position.horizontalPosition === desiredPosition.horizontalPosition && 
+                        p.position.verticalPosition === desiredPosition.verticalPosition - pawnDirection && 
+                        p.isPawn && 
+                        (p as Pawn).enPassant);
                 if (piece) {
                     return true;
                 }
