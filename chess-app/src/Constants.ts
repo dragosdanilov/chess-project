@@ -1,3 +1,4 @@
+import { Pawn } from "./models/Pawn";
 import { Piece } from "./models/Piece";
 import { Position } from "./models/Position";
 import { PieceType, TeamType } from "./Types";
@@ -48,44 +49,36 @@ export const initialBoardState: Piece[] = [
     PieceType.ROOK,
     TeamType.OPPONENT),
 
-    new Piece( 
+    new Pawn( 
     new Position(0, 6), 
-    PieceType.PAWN,
     TeamType.OPPONENT),
 
-    new Piece( 
+    new Pawn( 
     new Position(1, 6), 
-    PieceType.PAWN,
     TeamType.OPPONENT),
 
-    new Piece( 
+    new Pawn( 
     new Position(2, 6), 
-    PieceType.PAWN,
     TeamType.OPPONENT),
 
-    new Piece( 
+    new Pawn( 
     new Position(3, 6), 
-    PieceType.PAWN,
     TeamType.OPPONENT),
 
-    new Piece( 
+    new Pawn( 
     new Position(4, 6), 
-    PieceType.PAWN,
     TeamType.OPPONENT),
 
-    new Piece( 
+    new Pawn( 
     new Position(5, 6), 
-    PieceType.PAWN,
     TeamType.OPPONENT),
 
-    new Piece( 
+    new Pawn( 
     new Position(6, 6), 
-    PieceType.PAWN,
     TeamType.OPPONENT),
 
-    new Piece( 
+    new Pawn( 
     new Position(7, 6), 
-    PieceType.PAWN,
     TeamType.OPPONENT),
 
     new Piece( 
@@ -128,43 +121,27 @@ export const initialBoardState: Piece[] = [
     PieceType.ROOK,
     TeamType.OUR),
 
-    new Piece( 
-    new Position(0, 1), 
-    PieceType.PAWN,
-    TeamType.OUR),
+    new Pawn( 
+    new Position(0, 1),     TeamType.OUR),
 
-    new Piece( 
-    new Position(1, 1), 
-    PieceType.PAWN,
-    TeamType.OUR),
+    new Pawn( 
+    new Position(1, 1),     TeamType.OUR),
 
-    new Piece( 
-    new Position(2, 1), 
-    PieceType.PAWN,
-    TeamType.OUR),
+    new Pawn( 
+    new Position(2, 1),     TeamType.OUR),
 
-    new Piece( 
-    new Position(3, 1), 
-    PieceType.PAWN,
-    TeamType.OUR),
+    new Pawn( 
+    new Position(3, 1),     TeamType.OUR),
 
-    new Piece( 
-    new Position(4, 1), 
-    PieceType.PAWN,
-    TeamType.OUR),
+    new Pawn( 
+    new Position(4, 1),     TeamType.OUR),
 
-    new Piece( 
-    new Position(5, 1), 
-    PieceType.PAWN,
-    TeamType.OUR),
+    new Pawn( 
+    new Position(5, 1),     TeamType.OUR),
 
-    new Piece( 
-    new Position(6, 1), 
-    PieceType.PAWN,
-    TeamType.OUR),
+    new Pawn( 
+    new Position(6, 1),     TeamType.OUR),
 
-    new Piece( 
-    new Position(7, 1),
-    PieceType.PAWN,
-    TeamType.OUR),
+    new Pawn( 
+    new Position(7, 1),    TeamType.OUR),
 ];
