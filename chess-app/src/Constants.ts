@@ -1,3 +1,4 @@
+import { Board } from "./models/Board";
 import { Pawn } from "./models/Pawn";
 import { Piece } from "./models/Piece";
 import { Position } from "./models/Position";
@@ -8,7 +9,7 @@ export const horizontalAxis = ["a", "b", "c", "d", "e", "f", "g", "h"];
 
 export const gridSize = 100;
 
-export const initialBoardState: Piece[] = [
+export const initialBoard: Board = new Board ([
     new Piece( 
     new Position(0, 7), 
     PieceType.ROOK, 
@@ -122,26 +123,34 @@ export const initialBoardState: Piece[] = [
     TeamType.OUR),
 
     new Pawn( 
-    new Position(0, 1),     TeamType.OUR),
+    new Position(0, 1),     
+    TeamType.OUR),
 
     new Pawn( 
-    new Position(1, 1),     TeamType.OUR),
+    new Position(1, 1),     
+    TeamType.OUR),
 
     new Pawn( 
-    new Position(2, 1),     TeamType.OUR),
+    new Position(2, 1),     
+    TeamType.OUR),
 
     new Pawn( 
-    new Position(3, 1),     TeamType.OUR),
+    new Position(3, 1),     
+    TeamType.OUR),
 
     new Pawn( 
-    new Position(4, 1),     TeamType.OUR),
+    new Position(4, 1),     
+    TeamType.OUR),
 
     new Pawn( 
-    new Position(5, 1),     TeamType.OUR),
+    new Position(5, 1),     
+    TeamType.OUR),
 
     new Pawn( 
-    new Position(6, 1),     TeamType.OUR),
+    new Position(6, 1),     
+    TeamType.OUR),
 
     new Pawn( 
-    new Position(7, 1),    TeamType.OUR),
-];
+    new Position(7, 1),    
+    TeamType.OUR),
+]);

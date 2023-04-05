@@ -9,4 +9,8 @@ export class Position {
     samePosition(otherPosition: Position) : boolean {
         return this.horizontalPosition === otherPosition.horizontalPosition && this.verticalPosition === otherPosition.verticalPosition
     }
+
+    clone(): Position {
+        return new Position(this.horizontalPosition, this.verticalPosition);
+    }
 }

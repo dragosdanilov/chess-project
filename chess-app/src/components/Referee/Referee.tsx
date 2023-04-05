@@ -1,13 +1,14 @@
 import { useEffect, useRef, useState } from "react";
-import { initialBoardState } from "../../Constants";
+import { initialBoard } from "../../Constants";
 import { Piece, Position } from "../../models";
+import { Board } from "../../models/Board";
 import { Pawn } from "../../models/Pawn";
 import { bishopMove, getPossibleBishopMoves, getPossibleKingMoves, getPossibleKnightMoves, getPossiblePawnMoves, getPossibleQueenMoves, getPossibleRookMoves, kingMove, knightMove, pawnMove, queenMove, rookMove } from "../../referee/rules";
 import { PieceType, TeamType } from "../../Types";
 import Chessboard from "../Chessboard/Chessboard";
 
 export default function Referee() {
-    const [pieces, setPieces] = useState<Piece[]>(initialBoardState);
+    const [board, setBoard] = useState<Board>(initialBoard);
     const [promotionPawn, setPromotionPawn] = useState<Piece>();
     const modalRef = useRef<HTMLDivElement>(null);
 
@@ -15,89 +16,38 @@ export default function Referee() {
         updatePossibleMoves();
     }, []);
     function updatePossibleMoves() {
-        setPieces((currentPieces) => {
-            return currentPieces.map(p => {
-                p.possibleMoves = getValidMoves(p, currentPieces);
-                return p;
-            });
-        });
+        board.calculateAllMoves();
     }
 
     function playMove(playedPiece: Piece, destination: Position) : boolean {
+        let playedMoveIsValid = false;
+
         const validMove = isValidMove(playedPiece.position, destination, playedPiece.type, playedPiece.team);
 
             // REDUCE FUNCTION
             // RESULTS => Array of results
             // PIECE => The current piece we are handling
 
-            const enPassantMove = isEnPassantMove(playedPiece.position, destination, playedPiece.type, playedPiece.team)
+        const enPassantMove = isEnPassantMove(playedPiece.position, destination, playedPiece.type, playedPiece.team);
 
-            const pawnDirection = playedPiece.team === TeamType.OUR ? 1 : -1;
+        // playMove modifies the board thus we need to call setBoard
+        setBoard((previousBoard) => {
+            // playing the move
+            playedMoveIsValid = board.playMove(enPassantMove, 
+            validMove, playedPiece, destination);
+            
+            return board.copy();
+        })
 
-            if(enPassantMove) {
-                const updatedPieces = pieces.reduce((results, piece) => {
-                    if (
-                        piece.samePiecePosition(playedPiece)
-                    ) {
-                        if (piece.isPawn)
-                            (piece as Pawn).enPassant = false;
-                        piece.position.horizontalPosition = destination.horizontalPosition;
-                        piece.position.verticalPosition = destination.verticalPosition;
-                        results.push(piece);
-                    } else if (
-                        !(piece.samePosition(new Position(destination.horizontalPosition, destination.verticalPosition - pawnDirection)))
-                    ) {
-                        if (piece.isPawn) {
-                            (piece as Pawn).enPassant = false;
-                        }
-                        results.push(piece);
-                    }
-                    return results;
-                }, [] as Piece[]);
+        // this is for promoting a pawn
+        let promotionRow = (playedPiece.team === TeamType.OUR) ? 7 : 0;
 
-                updatePossibleMoves();
-                setPieces(updatedPieces);
-            } else if (validMove) {
-                // UPDATES THE PIECE POSITION
-                // REMOVES ATTACKED PIECES
-
-                const updatedPieces = pieces.reduce((results, piece) => {
-
-                    if (
-                        piece.samePiecePosition(playedPiece)
-                    ) {
-                        // SPECIAL MOVE
-                        if (piece.isPawn)
-                            (piece as Pawn).enPassant = 
-                                Math.abs(playedPiece.position.verticalPosition - destination.verticalPosition) === 2 && 
-                                piece.type === PieceType.PAWN;
-                                
-                        piece.position.horizontalPosition = destination.horizontalPosition;
-                        piece.position.verticalPosition = destination.verticalPosition;
-
-                        let promotionRow = (piece.team === TeamType.OUR) ? 7 : 0;
-
-                        if (destination.verticalPosition === promotionRow && playedPiece.isPawn) {
-                            modalRef.current?.classList.remove("hidden");
-                            setPromotionPawn(piece);
-                        }
-                        results.push(piece);
-                    } else if (!(piece.samePosition(new Position(destination.horizontalPosition, destination.verticalPosition)))) {
-                        if (piece.isPawn) {
-                            (piece as Pawn).enPassant = false;
-                        }
-                        results.push(piece);
-                    }
-
-                    return results;
-                }, [] as Piece[]);
-
-                updatePossibleMoves();
-                setPieces(updatedPieces);
-            } else {
-                return false;
+            if (destination.verticalPosition === promotionRow && playedPiece.isPawn) {
+                modalRef.current?.classList.remove("hidden");
+                setPromotionPawn(playedPiece);
             }
-            return true;
+  
+        return playedMoveIsValid;
     }
 
     function isEnPassantMove(initialPosition: Position, desiredPosition: Position, type: PieceType, team: TeamType) {
@@ -105,7 +55,7 @@ export default function Referee() {
 
         if (type === PieceType.PAWN) {
             if ((desiredPosition.horizontalPosition - initialPosition.horizontalPosition === -1 || desiredPosition.horizontalPosition - initialPosition.horizontalPosition === 1) && desiredPosition.verticalPosition - initialPosition.verticalPosition === pawnDirection) {
-                const piece = pieces.find(
+                const piece = board.pieces.find(
                     (p) => 
                         p.position.horizontalPosition === desiredPosition.horizontalPosition && 
                         p.position.verticalPosition === desiredPosition.verticalPosition - pawnDirection && 
@@ -129,51 +79,31 @@ export default function Referee() {
         let validMove = false;
         switch(type) {
             case PieceType.PAWN:
-                validMove = pawnMove(initialPosition, desiredPosition, team, pieces);
+                validMove = pawnMove(initialPosition, desiredPosition, team, board.pieces);
                 break;
             case PieceType.KNIGHT:
-                validMove = knightMove(initialPosition, desiredPosition, team, pieces);
+                validMove = knightMove(initialPosition, desiredPosition, team, board.pieces);
                 break;
             case PieceType.BISHOP:
-                validMove = bishopMove(initialPosition, desiredPosition, team, pieces);
+                validMove = bishopMove(initialPosition, desiredPosition, team, board.pieces);
                 break;
             case PieceType.ROOK:
-                validMove = rookMove(initialPosition, desiredPosition, team, pieces);
+                validMove = rookMove(initialPosition, desiredPosition, team, board.pieces);
                 break;
             case PieceType.QUEEN:
-                validMove = queenMove(initialPosition, desiredPosition, team, pieces);
+                validMove = queenMove(initialPosition, desiredPosition, team, board.pieces);
                 break;
             case PieceType.KING:
-                validMove = kingMove(initialPosition, desiredPosition, team, pieces);
+                validMove = kingMove(initialPosition, desiredPosition, team, board.pieces);
         }
         return validMove;   
-    }
-
-    function getValidMoves(piece: Piece, boardState: Piece[]): Position[] {
-        switch(piece.type) 
-        {
-            case PieceType.PAWN:
-                return getPossiblePawnMoves(piece, boardState);
-            case PieceType.KNIGHT:
-                return getPossibleKnightMoves(piece, boardState);
-            case PieceType.BISHOP:
-                return getPossibleBishopMoves(piece, boardState);
-            case PieceType.ROOK:
-                return getPossibleRookMoves(piece, boardState);
-            case PieceType.QUEEN:
-                return getPossibleQueenMoves(piece, boardState);
-            case PieceType.KING:
-                return getPossibleKingMoves(piece, boardState);
-            default:
-                return[];
-        }
     }
 
     function promotePawn(pieceType: PieceType) {
         if (promotionPawn === undefined) {
             return;
         }
-        const updatedPieces = pieces.reduce((results, piece) => {
+        board.pieces = board.pieces.reduce((results, piece) => {
             if (piece.samePiecePosition(promotionPawn)) {
                 piece.type = pieceType;
                 const teamType = (piece.team === TeamType.OUR) ? "w" : "b"
@@ -204,7 +134,6 @@ export default function Referee() {
         }, [] as Piece[])
 
         updatePossibleMoves();
-        setPieces(updatedPieces);
 
         modalRef.current?.classList.add("hidden")
     }
@@ -225,7 +154,7 @@ export default function Referee() {
         </div>
         <Chessboard
                     playMove={playMove}
-                    pieces={pieces}/>
+                    pieces={board.pieces}/>
     </>
     )
 }
