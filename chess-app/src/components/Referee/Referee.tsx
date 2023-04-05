@@ -36,7 +36,7 @@ export default function Referee() {
             playedMoveIsValid = board.playMove(enPassantMove, 
             validMove, playedPiece, destination);
             
-            return board.copy();
+            return board.clone();
         })
 
         // this is for promoting a pawn
