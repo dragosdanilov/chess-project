@@ -44,7 +44,11 @@ export default function Referee() {
 
             if (destination.verticalPosition === promotionRow && playedPiece.isPawn) {
                 modalRef.current?.classList.remove("hidden");
-                setPromotionPawn(playedPiece);
+                setPromotionPawn((previousPromotionPawn) => {
+                    const clonedPlayedPiece = playedPiece.clone();
+                    clonedPlayedPiece.position = destination.clone();
+                    return clonedPlayedPiece;
+                });
             }
   
         return playedMoveIsValid;
@@ -103,37 +107,24 @@ export default function Referee() {
         if (promotionPawn === undefined) {
             return;
         }
-        board.pieces = board.pieces.reduce((results, piece) => {
-            if (piece.samePiecePosition(promotionPawn)) {
-                piece.type = pieceType;
-                const teamType = (piece.team === TeamType.OUR) ? "w" : "b"
-                let image = "";
-                switch(pieceType) {
-                    case PieceType.ROOK: {
-                        image = "rook";
-                        break;
-                    }
-                    case PieceType.KNIGHT: {
-                        image = "knight";
-                        break;
 
-                    }
-                    case PieceType.BISHOP: {
-                        image = "bishop";
-                        break;
-                    }
-                    case PieceType.QUEEN: {
-                        image = "queen";
-                    }
+        setBoard((previousBoard) => {
+            const clonedBoard = board.clone();
+            clonedBoard.pieces = clonedBoard.pieces.reduce((results, piece) => {
+                if (piece.samePiecePosition(promotionPawn)) {
+                    results.push(new Piece(piece.position.clone(), pieceType, 
+                    piece.team));
+                } else {
+                    results.push(piece);
                 }
-                piece.image = `assets/images/${image}_${teamType}.png`;
-            }
+    
+                return results;
+            }, [] as Piece[]);
 
-            results.push(piece);
-            return results;
-        }, [] as Piece[])
-
-        updatePossibleMoves();
+            clonedBoard.calculateAllMoves();
+            
+            return clonedBoard;
+        })
 
         modalRef.current?.classList.add("hidden")
     }
