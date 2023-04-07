@@ -17,28 +17,49 @@ export class Board {
             piece.possibleMoves = this.getValidMoves(piece, this.pieces);
         }
 
+        this.checkKingMoves();
+    }
+
+    checkKingMoves() {
         const king = this.pieces.find(p => p.isKing && p.team === TeamType.OPPONENT);
 
         if (king?.possibleMoves === undefined) return;
 
-        const originalKingPosition = king.position.clone();
         // simulate king moves
         for (const move of king.possibleMoves) {
-            king.position = move;
+            const simulatedBoard = this.clone();
+
+            const pieceAtDestination = simulatedBoard.pieces.find(p => p.samePosition(move));
+
+            // if there is a piece at the destination remove it
+            if (pieceAtDestination !== undefined) {
+                simulatedBoard.pieces = simulatedBoard.pieces.filter(p => !p.samePosition(move));
+            }
+
+            // tells the compiler that the simulated king is always there
+            const simulatedKing = simulatedBoard.pieces.find(p => p.isKing && p.team === TeamType.OPPONENT);
+            simulatedKing!.position = move;
+
+            for (const enemy of simulatedBoard.pieces.filter(p => p.team === TeamType.OUR)) {
+                enemy.possibleMoves = simulatedBoard.getValidMoves(enemy, simulatedBoard.pieces);
+            }
 
             let safe = true;
 
             // determine if the move is safe
-            for (const p of this.pieces) {
+            for (const p of simulatedBoard.pieces) {
                 if (p.team === TeamType.OPPONENT) continue;
+
                 if (p.isPawn) {
-                    const possiblePawnMoves = this.getValidMoves(p, this.pieces);
+                    const possiblePawnMoves = simulatedBoard.getValidMoves(p, simulatedBoard.pieces);
 
                     if (possiblePawnMoves?.some(ppm => ppm.horizontalPosition !== p.position.horizontalPosition && ppm.samePosition(move))) {
                         safe = false;
+                        break;
                     }
                 } else if (p.possibleMoves?.some(p => p.samePosition(move))) {
                     safe = false;
+                    break;
                 }
             }
 
@@ -47,7 +68,6 @@ export class Board {
                 king.possibleMoves = king.possibleMoves?.filter(m => !m.samePosition(move))
             }
         }
-        king.position = originalKingPosition;
     }
 
     getValidMoves(piece: Piece, boardState: Piece[]): Position[] {
