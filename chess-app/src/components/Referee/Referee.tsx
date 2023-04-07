@@ -25,10 +25,9 @@ export default function Referee() {
         let playedMoveIsValid = false;
 
         const validMove = playedPiece.possibleMoves?.some(m => m.samePosition(destination));
-            // REDUCE FUNCTION
-            // RESULTS => Array of results
-            // PIECE => The current piece we are handling
 
+        if (!validMove) return false;
+    
         const enPassantMove = isEnPassantMove(playedPiece.position, destination, playedPiece.type, playedPiece.team);
 
         // playMove modifies the board thus we need to call setBoard
