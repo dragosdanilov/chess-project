@@ -22,8 +22,13 @@ export class Board {
         this.checkKingMoves();
     }
 
+    get activeTeam() : TeamType {
+        return this.totalTurns % 2 === 0 ? TeamType.OPPONENT : TeamType.OUR;
+    }
+
     checkKingMoves() {
-        const king = this.pieces.find(p => p.isKing && p.team === TeamType.OPPONENT);
+        // king of the active team
+        const king = this.pieces.find(p => p.isKing && p.team === this.activeTeam);
 
         if (king?.possibleMoves === undefined) return;
 
@@ -38,11 +43,11 @@ export class Board {
                 simulatedBoard.pieces = simulatedBoard.pieces.filter(p => !p.samePosition(move));
             }
 
-            // tells the compiler that the simulated king is always there
-            const simulatedKing = simulatedBoard.pieces.find(p => p.isKing && p.team === TeamType.OPPONENT);
+            // tells the compiler that the simulated king is always present
+            const simulatedKing = simulatedBoard.pieces.find(p => p.isKing && p.team === simulatedBoard.activeTeam);
             simulatedKing!.position = move;
 
-            for (const enemy of simulatedBoard.pieces.filter(p => p.team === TeamType.OUR)) {
+            for (const enemy of simulatedBoard.pieces.filter(p => p.team !== simulatedBoard.activeTeam)) {
                 enemy.possibleMoves = simulatedBoard.getValidMoves(enemy, simulatedBoard.pieces);
             }
 
@@ -50,7 +55,7 @@ export class Board {
 
             // determine if the move is safe
             for (const p of simulatedBoard.pieces) {
-                if (p.team === TeamType.OPPONENT) continue;
+                if (p.team === simulatedBoard.activeTeam) continue;
 
                 if (p.isPawn) {
                     const possiblePawnMoves = simulatedBoard.getValidMoves(p, simulatedBoard.pieces);
