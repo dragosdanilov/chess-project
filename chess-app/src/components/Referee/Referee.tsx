@@ -41,11 +41,10 @@ export default function Referee() {
         // playMove modifies the board thus we need to call setBoard
         setBoard((previousBoard) => {
             const clonedBoard = board.clone();
+            clonedBoard.totalTurns += 1;
             // playing the move
             playedMoveIsValid = clonedBoard.playMove(enPassantMove, 
             validMove, playedPiece, destination);
-
-            clonedBoard.totalTurns += 1;
             
             return clonedBoard;
         })
