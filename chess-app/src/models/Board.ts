@@ -21,6 +21,7 @@ export class Board {
 
         // check if the king moves are valid
         this.checkKingMoves();
+        this.checkCurrentTeamMoves();
 
         // remove possible moves for inactive team
         for (const piece of this.pieces.filter(p => p.team !== this.activeTeam)) {
@@ -79,6 +80,37 @@ export class Board {
             // remove the move from possibleMoves
             if (!safe) {
                 king.possibleMoves = king.possibleMoves?.filter(m => !m.samePosition(move))
+            }
+        }
+    }
+
+    checkCurrentTeamMoves() {
+        // loop through all the current team's pieces
+        for (const piece of this.pieces.filter(p => p.team === this.activeTeam)) {
+            if (piece.possibleMoves === undefined) continue;
+
+            // simulate all the piece moves
+            for (const move of piece.possibleMoves) {
+                const simulatedBoard = this.clone();
+                
+                const clonedPiece = simulatedBoard.pieces.find(p => p.samePiecePosition(piece))!;
+                clonedPiece.position = move.clone();
+
+                const clonedKing = simulatedBoard.pieces.find(p => p.isKing && p.team === simulatedBoard.activeTeam)!;
+
+                for (const enemy of simulatedBoard.pieces.filter(p => p.team !== simulatedBoard.activeTeam)) {
+                    enemy.possibleMoves = simulatedBoard.getValidMoves(enemy, simulatedBoard.pieces);
+
+                    if (enemy.isPawn) {
+                        if (enemy.possibleMoves.some(m => m.horizontalPosition !== enemy.position.horizontalPosition && m.samePosition(clonedKing.position))) {
+                        piece.possibleMoves = piece.possibleMoves?.filter(m => !m.samePosition(move));
+                        }
+                    } else {
+                        if (enemy.possibleMoves.some(m => m.samePosition(clonedKing.position))) {
+                            piece.possibleMoves = piece.possibleMoves?.filter(m => !m.samePosition(move));
+                        }
+                    }
+                }
             }
         }
     }
