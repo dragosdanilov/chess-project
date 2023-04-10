@@ -19,7 +19,13 @@ export class Board {
             piece.possibleMoves = this.getValidMoves(piece, this.pieces);
         }
 
+        // check if the king moves are valid
         this.checkKingMoves();
+
+        // remove possible moves for inactive team
+        for (const piece of this.pieces.filter(p => p.team !== this.activeTeam)) {
+            piece.possibleMoves = [];
+        }
     }
 
     get activeTeam() : TeamType {
