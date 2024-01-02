@@ -106,6 +106,7 @@ export class Board {
                         (piece as Pawn).enPassant = false;
                     piece.position.horizontalPosition = destination.horizontalPosition;
                     piece.position.verticalPosition = destination.verticalPosition;
+                    piece.hasMoved = true;
                     results.push(piece);
                 } else if (
                     !(piece.samePosition(new Position(destination.horizontalPosition, destination.verticalPosition - pawnDirection)))
@@ -137,7 +138,7 @@ export class Board {
                             
                     piece.position.horizontalPosition = destination.horizontalPosition;
                     piece.position.verticalPosition = destination.verticalPosition;
-
+                    piece.hasMoved = true;
                     results.push(piece);
                 } else if (!piece.samePosition(destination)) {
                     if (piece.isPawn) {
