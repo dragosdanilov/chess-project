@@ -1,4 +1,4 @@
-import { getPossibleBishopMoves, getPossibleKingMoves, getPossibleKnightMoves, getPossiblePawnMoves, getPossibleQueenMoves, getPossibleRookMoves } from "../referee/rules";
+import { getCastlingMoves, getPossibleBishopMoves, getPossibleKingMoves, getPossibleKnightMoves, getPossiblePawnMoves, getPossibleQueenMoves, getPossibleRookMoves } from "../referee/rules";
 import { PieceType, TeamType } from "../Types";
 import { Pawn } from "./Pawn";
 import { Piece } from "./Piece";
@@ -17,6 +17,11 @@ export class Board {
         // calculate the moves of all pieces
         for (const piece of this.pieces) {
             piece.possibleMoves = this.getValidMoves(piece, this.pieces);
+        }
+
+        // calculate castling moves
+        for (const king of this.pieces.filter(p => p.isKing)) {
+            king.possibleMoves = getCastlingMoves(king, this.pieces);
         }
 
         // check if the current team moves are valid

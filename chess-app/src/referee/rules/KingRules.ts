@@ -141,3 +141,26 @@ export const getPossibleKingMoves = (king: Piece, boardState: Piece[]): Position
 
     return possibleMoves;
 }
+
+// in this method the enemy moves have already been calculated
+export const getCastlingMoves = (king: Piece, boardState: Piece[]): Position[] => {
+    const possibleMoves: Position[] = []; 
+
+    if(king.hasMoved) return possibleMoves;
+
+    // get the rooks from the king's team which haven't moved
+    const rooks = boardState.filter(p => p.isRook 
+        && p.team === king.team 
+        && !p.hasMoved)
+
+        // loop through the rooks
+        for(const rook of rooks) {
+            // determine if we need to go to the right or the left side
+            const direction = (king.position.horizontalPosition - rook.position.horizontalPosition > 0) ? 1 : -1;
+
+            const adjacentPosition = king.position.clone();
+            adjacentPosition.horizontalPosition += direction;
+        }
+
+    return possibleMoves;
+}
