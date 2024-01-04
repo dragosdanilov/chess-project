@@ -48,6 +48,7 @@ export const getPossibleRookMoves = (rook: Piece, boardState: Piece[]): Position
 
     // vertical path
     for (let i = 1; i < 8; i++) {
+        if(rook.position.verticalPosition + i > 7) break;
         const topPath = new Position(rook.position.horizontalPosition, rook.position.verticalPosition + i);
 
         if (!tileIsOccupied(topPath, boardState)) {
@@ -61,6 +62,7 @@ export const getPossibleRookMoves = (rook: Piece, boardState: Piece[]): Position
     }
 
     for (let i = 1; i < 8; i++) {
+        if(rook.position.verticalPosition - i < 0) break;
         const bottomPath = new Position(rook.position.horizontalPosition, rook.position.verticalPosition - i);
 
         if (!tileIsOccupied(bottomPath, boardState)) {
@@ -75,6 +77,7 @@ export const getPossibleRookMoves = (rook: Piece, boardState: Piece[]): Position
 
     // horizontal path
     for (let i = 1; i < 8; i++) {
+        if(rook.position.horizontalPosition + i > 7) break;
         const rightPath = new Position(rook.position.horizontalPosition + i, rook.position.verticalPosition);
 
         if (!tileIsOccupied(rightPath, boardState)) {
@@ -88,6 +91,7 @@ export const getPossibleRookMoves = (rook: Piece, boardState: Piece[]): Position
     }
 
     for (let i = 1; i < 8; i++) {
+        if(rook.position.horizontalPosition - i < 0) break;
         const leftPath = new Position(rook.position.horizontalPosition - i, rook.position.verticalPosition);
 
         if (!tileIsOccupied(leftPath, boardState)) {
