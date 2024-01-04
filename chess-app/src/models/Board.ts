@@ -115,7 +115,7 @@ export class Board {
                     piece.hasMoved = true;
                     results.push(piece);
                 } else if (
-                    !(piece.samePosition(new Position(destination.horizontalPosition, destination.verticalPosition - pawnDirection)))
+                    !piece.samePosition(new Position(destination.horizontalPosition, destination.verticalPosition - pawnDirection))
                 ) {
                     if (piece.isPawn) {
                         (piece as Pawn).enPassant = false;
