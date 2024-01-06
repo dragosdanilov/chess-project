@@ -120,6 +120,7 @@ export class Board {
                     return p;
                 });
 
+                this.calculateAllMoves();
                 return true;
             }
 
