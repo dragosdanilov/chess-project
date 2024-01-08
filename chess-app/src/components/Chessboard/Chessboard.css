@@ -42,3 +42,27 @@
     cursor: pointer;
     transition: 0.2s;
 }
+
+.modal > .modal-body > .checkmate-body {
+    display: flex;
+    flex-direction: column;
+    gap: 48px;
+
+}
+
+.modal > .modal-body > .checkmate-body > span {
+    font-size: 32px;
+}
+
+.modal > .modal-body > .checkmate-body > button {
+    background-color: #7aa2ad;
+    border: none;
+    border-radius: 8px;
+    padding: 24px 48px;
+    font-size: 32px;
+    color: white;
+}
+
+.modal > .modal-body > .checkmate-body > button:hover {
+    cursor: pointer;
+}
