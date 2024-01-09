@@ -7,6 +7,7 @@ import { Position } from "./Position";
 export class Board {
     pieces: Piece[];
     totalTurns: number;
+    winningTeam?: TeamType;
     
     constructor(pieces: Piece[], totalTurns: number) {
         this.pieces = pieces;

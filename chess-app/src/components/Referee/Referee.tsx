@@ -153,10 +153,10 @@ export default function Referee() {
                     <img onClick={() => promotePawn(PieceType.QUEEN)} src={`/assets/images/queen_${promotionTeamType()}.png`}/>
                 </div>
         </div>
-        <div className="modal" ref ={checkmateModalRef}>
+        <div className="modal hidden" ref ={checkmateModalRef}>
             <div className="modal-body">
                 <div className="checkmate-body">
-                    <span>The winning team is ...</span>
+                    <span>The winning team is {board.winningTeam === TeamType.OUR ? "white" : "black"}</span>
                     <button>Play again</button>
                 </div>
             </div>
