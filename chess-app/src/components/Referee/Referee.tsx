@@ -45,6 +45,10 @@ export default function Referee() {
                 validMove, playedPiece, 
                 destination);
 
+            if(clonedBoard.winningTeam !== undefined) {
+                checkmateModalRef.current?.classList.remove("hidden");
+            }
+
             return clonedBoard;
         })
 

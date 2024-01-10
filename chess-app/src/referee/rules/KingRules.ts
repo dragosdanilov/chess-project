@@ -33,6 +33,11 @@ export const getPossibleKingMoves = (king: Piece, boardState: Piece[]): Position
     for (let i = 1; i < 2; i++) {
         const topPath = new Position(king.position.horizontalPosition, king.position.verticalPosition + i);
 
+        // if the move is outside of the board do not add it
+        if(topPath.horizontalPosition < 0 || topPath.horizontalPosition > 7 || topPath.verticalPosition < 0 || topPath.verticalPosition > 7) {
+            break;
+        }
+
         if (!tileIsOccupied(topPath, boardState)) {
             possibleMoves.push(topPath);
         } else if (tileIsOccupiedByOpponent(topPath, boardState, king.team)) {
@@ -45,6 +50,11 @@ export const getPossibleKingMoves = (king: Piece, boardState: Piece[]): Position
 
     for (let i = 1; i < 2; i++) {
         const bottomPath = new Position(king.position.horizontalPosition, king.position.verticalPosition - i);
+
+        // if the move is outside of the board do not add it
+        if(bottomPath.horizontalPosition < 0 || bottomPath.horizontalPosition > 7 || bottomPath.verticalPosition < 0 || bottomPath.verticalPosition > 7) {
+            break;
+        }
 
         if (!tileIsOccupied(bottomPath, boardState)) {
             possibleMoves.push(bottomPath);
@@ -60,6 +70,11 @@ export const getPossibleKingMoves = (king: Piece, boardState: Piece[]): Position
     for (let i = 1; i < 2; i++) {
         const rightPath = new Position(king.position.horizontalPosition + i, king.position.verticalPosition);
 
+        // if the move is outside of the board do not add it
+        if(rightPath.horizontalPosition < 0 || rightPath.horizontalPosition > 7 || rightPath.verticalPosition < 0 || rightPath.verticalPosition > 7) {
+            break;
+        }
+
         if (!tileIsOccupied(rightPath, boardState)) {
             possibleMoves.push(rightPath);
         } else if (tileIsOccupiedByOpponent(rightPath, boardState, king.team)) {
@@ -72,6 +87,11 @@ export const getPossibleKingMoves = (king: Piece, boardState: Piece[]): Position
 
     for (let i = 1; i < 2; i++) {
         const leftPath = new Position(king.position.horizontalPosition - i, king.position.verticalPosition);
+
+        // if the move is outside of the board do not add it
+        if(leftPath.horizontalPosition < 0 || leftPath.horizontalPosition > 7 || leftPath.verticalPosition < 0 || leftPath.verticalPosition > 7) {
+            break;
+        }
 
         if (!tileIsOccupied(leftPath, boardState)) {
             possibleMoves.push(leftPath);
@@ -87,6 +107,11 @@ export const getPossibleKingMoves = (king: Piece, boardState: Piece[]): Position
     for (let i = 1; i < 2; i++) {
         const topRightPath = new Position(king.position.horizontalPosition + i, king.position.verticalPosition + i);
 
+        // if the move is outside of the board do not add it
+        if(topRightPath.horizontalPosition < 0 || topRightPath.horizontalPosition > 7 || topRightPath.verticalPosition < 0 || topRightPath.verticalPosition > 7) {
+            break;
+        }
+
         if (!tileIsOccupied(topRightPath, boardState)) {
             possibleMoves.push(topRightPath);
         } else if (tileIsOccupiedByOpponent(topRightPath, boardState, king.team)) {
@@ -100,6 +125,11 @@ export const getPossibleKingMoves = (king: Piece, boardState: Piece[]): Position
     // bottom right path
     for (let i = 1; i < 2; i++) {
         const bottomRightPath = new Position(king.position.horizontalPosition + i, king.position.verticalPosition - i);
+
+        // if the move is outside of the board do not add it
+        if(bottomRightPath.horizontalPosition < 0 || bottomRightPath.horizontalPosition > 7 || bottomRightPath.verticalPosition < 0 || bottomRightPath.verticalPosition > 7) {
+            break;
+        }
 
         if (!tileIsOccupied(bottomRightPath, boardState)) {
             possibleMoves.push(bottomRightPath);
@@ -115,6 +145,11 @@ export const getPossibleKingMoves = (king: Piece, boardState: Piece[]): Position
     for (let i = 1; i < 2; i++) {
         const topLeftPath = new Position(king.position.horizontalPosition - i, king.position.verticalPosition + i);
 
+        // if the move is outside of the board do not add it
+        if(topLeftPath.horizontalPosition < 0 || topLeftPath.horizontalPosition > 7 || topLeftPath.verticalPosition < 0 || topLeftPath.verticalPosition > 7) {
+            break;
+        }
+
         if (!tileIsOccupied(topLeftPath, boardState)) {
             possibleMoves.push(topLeftPath);
         } else if (tileIsOccupiedByOpponent(topLeftPath, boardState, king.team)) {
@@ -128,6 +163,11 @@ export const getPossibleKingMoves = (king: Piece, boardState: Piece[]): Position
     // bottom left path
     for (let i = 1; i < 2; i++) {
         const bottomLeftPath = new Position(king.position.horizontalPosition - i, king.position.verticalPosition - i);
+
+        // if the move is outside of the board do not add it
+        if(bottomLeftPath.horizontalPosition < 0 || bottomLeftPath.horizontalPosition > 7 || bottomLeftPath.verticalPosition < 0 || bottomLeftPath.verticalPosition > 7) {
+            break;
+        }
 
         if (!tileIsOccupied(bottomLeftPath, boardState)) {
             possibleMoves.push(bottomLeftPath);

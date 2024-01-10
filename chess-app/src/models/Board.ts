@@ -33,6 +33,12 @@ export class Board {
         for (const piece of this.pieces.filter(p => p.team !== this.activeTeam)) {
             piece.possibleMoves = [];
         }
+
+        // check if the playing team has any moves left
+        // otherwise checkmate
+        if(this.pieces.filter(p => p.team === this.activeTeam).some(p => p.possibleMoves !== undefined && p.possibleMoves.length > 0)) return;
+
+        this.winningTeam = (this.activeTeam === TeamType.OUR) ? TeamType.OPPONENT : TeamType.OUR;
     }
 
     get activeTeam() : TeamType {
